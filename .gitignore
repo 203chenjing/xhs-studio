@@ -1,7 +1,31 @@
-backend/.venv/
+﻿# Environment & secrets
+.env
+.env.*
+!.env.example
 backend/.env
-backend/uploads/
-backend/logs/
+backend/.env.*
+!backend/.env.example
+credentials.json
+secrets.*
+*.pem
+
+# Python
+backend/.venv/
 __pycache__/
 *.pyc
+.pytest_cache/
+
+# Node / build
+node_modules/
+dist/
+build/
+
+# IDE / local tooling
+.cursor/
+*.local
+.lark*
+
+# App runtime
+backend/uploads/
+backend/logs/
 .DS_Store
