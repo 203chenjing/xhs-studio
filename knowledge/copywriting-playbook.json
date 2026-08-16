@@ -1,0 +1,230 @@
+{
+  "version": "1.0",
+  "studio_policy": {
+    "emoji": "页内文案与 pages 字段禁止 emoji；caption 话题用 # 标签，不用表情符号",
+    "tone": "中文创作者口语，像过来人分享，不像简历/公文/课程大纲",
+    "density": "每页一个核心信息点；标题 12-20 字为佳；正文短句+具体细节",
+    "sources": [
+      "op7418/guizang-social-card-skill: hooks, title-shortener, content-planning, category-cookbook",
+      "comeonzhj/Auto-Redbook-Skills: markdown→卡片语气、清单节奏",
+      "testany-io/xiaohongshu-guide: 爆款结构、收藏动机",
+      "adjfks/write-xiaohongshu: 标题公式、正文分段",
+      "小红书高互动抽象模式: 面经/干货/清单 hook、攒人品 CTA"
+    ]
+  },
+  "title_formulas": {
+    "max_chars_push": 20,
+    "max_chars_publish": 28,
+    "hook_types": [
+      {
+        "id": "number-payoff",
+        "name": "数字收益",
+        "pattern": "N个/ N天/ N轮 + 具体对象 + 结果",
+        "example_abstract": "5道题搞懂XX / 3轮面试拿下XX",
+        "best_for": ["干货", "清单", "面经"]
+      },
+      {
+        "id": "pain-question",
+        "name": "痛点问句",
+        "pattern": "你是不是也… / 为什么总是… / XX到底怎么…",
+        "example_abstract": "秋招笔试总挂？可能是这3点没做对",
+        "best_for": ["面经", "干货"]
+      },
+      {
+        "id": "contrarian",
+        "name": "反常识",
+        "pattern": "别再做XX / 其实XX没用 / 大多数人搞反了",
+        "example_abstract": "别盲目刷题，先搞懂这2类高频考点",
+        "best_for": ["干货", "清单"]
+      },
+      {
+        "id": "confession",
+        "name": "亲历坦白",
+        "pattern": "我踩过的坑 / 亲测 / 血泪总结",
+        "example_abstract": "我秋招挂了7家，才摸清面试官真正在问什么",
+        "best_for": ["面经"]
+      },
+      {
+        "id": "checklist-promise",
+        "name": "清单承诺",
+        "pattern": "收藏向：一份XX清单 / 直接照抄的XX模板",
+        "example_abstract": "秋招投递前自查清单（附时间线）",
+        "best_for": ["清单", "干货"]
+      },
+      {
+        "id": "curiosity-gap",
+        "name": "好奇留白",
+        "pattern": "最后一点最关键 / 第N个很多人不知道",
+        "example_abstract": "产品岗群面，第4个环节决定你能不能过",
+        "best_for": ["面经", "干货"]
+      }
+    ],
+    "cover_subtitle": {
+      "structure": "人群 + 场景 + 收益（一行，8-18字）",
+      "patterns": [
+        "27届｜产品实习｜3轮面经复盘",
+        "笔试→群面→HR面，全流程踩坑总结",
+        "照着做能少踩80%的坑（亲测）"
+      ],
+      "avoid": ["空泛「干货分享」", "纯职位名堆砌", "超过两行副标"]
+    }
+  },
+  "caption_structure": {
+    "blocks": [
+      "hook：1-2句抓人（问句/数字/反差）",
+      "body：3-6句展开（场景+做法+结果，可分段）",
+      "空行",
+      "CTA：收藏/转发/评论区互动（攒人品式，不夸张）",
+      "空行",
+      "tags：5-8个 #话题，与内容强相关"
+    ],
+    "cta_patterns": [
+      "收藏备用，祝大家都拿到心仪 offer",
+      "有同样经历的姐妹评论区聊聊",
+      "整理不易，转发给需要的同学",
+      "下一篇写XX，想看的扣1"
+    ],
+    "tag_hints": {
+      "面经": ["#秋招", "#校招", "#面经", "#实习", "#互联网"],
+      "干货": ["#干货", "#职场", "#学习方法", "#效率"],
+      "清单": ["#清单", "#避坑", "#攻略", "#收藏"]
+    }
+  },
+  "content_types": {
+    "面经": {
+      "id": "面经",
+      "aliases": ["面试", "秋招", "校招", "群面", "HR面", "笔试", "offer", "反问"],
+      "tone": "亲历复盘、具体公司/岗位可泛化（勿编造未给出的公司名）、STAR 叙事、面试官原话可引号",
+      "default_recipe": "autumn-interview-mix",
+      "title_hooks": ["confession", "pain-question", "number-payoff"],
+      "page_copy": {
+        "cover": "强 hook + stat 数字（轮次/题数/天数）；subtitle 写岗位+届次",
+        "timeline": "按面试阶段写：笔试/群面/业务面/HR面；每步「考什么+我怎么答+结果」",
+        "points": "踩坑/高分回答要点；head 写结论，body 写场景+一句话证据",
+        "quote": "面试官原话或自我反思金句，1-2句，可黑底页",
+        "summary": "metrics 写准备周期/投递数/offer数（用户未给则写「约」或不写精确数）",
+        "ending": "tag-wall + 攒人品 CTA"
+      },
+      "density": {
+        "points_items": "3-5条，body 35-70字",
+        "timeline_steps": "3-5步，每步含避坑小贴士",
+        "free_paragraphs": "1-3段，每段 2-3 句"
+      }
+    },
+    "干货": {
+      "id": "干货",
+      "aliases": ["教程", "方法", "技巧", "攻略", "原理", "科普", "怎么"],
+      "tone": "过来人教学口吻、可执行、有例子，少形容词堆砌",
+      "default_recipe": "ledger-buying-guide",
+      "title_hooks": ["number-payoff", "contrarian", "curiosity-gap"],
+      "page_copy": {
+        "cover": "数字或反差 hook；subtitle 写「适合谁+解决什么问题」",
+        "points": "方法论分点；每条「做什么+为什么+怎么做」",
+        "card": "单点展开或避坑提醒",
+        "compare": "常见误区 vs 正确做法",
+        "summary": "3条 takeaway + 可选 metrics",
+        "ending": "收藏 CTA + 相关话题"
+      },
+      "density": {
+        "points_items": "4-5条，body 40-80字",
+        "card_body": "2-4句，含例子",
+        "caption_body": "4-6句，第一段必须给收益"
+      }
+    },
+    "清单": {
+      "id": "清单",
+      "aliases": ["checklist", "避坑", "排雷", "必备", "自查", "todo", "步骤清单"],
+      "tone": "干脆、条目化、后果导向（不这样做会怎样）",
+      "default_recipe": "number-shock-listicle",
+      "title_hooks": ["checklist-promise", "number-payoff", "pain-question"],
+      "page_copy": {
+        "cover": "N个XX / N步搞定；stat 填数字",
+        "points": "ledger 或 numbered-pill；head 写坑/动作，body 写后果或做法",
+        "compare": "错误做法 vs 正确做法（可选）",
+        "summary": "一句话收束 + 3条必记",
+        "ending": "收藏向 CTA + 标签墙"
+      },
+      "density": {
+        "points_items": "4-6条，偏短句",
+        "compare_rows": "4-6行对比"
+      }
+    }
+  },
+  "page_copy_density": {
+    "cover": { "title_chars": "8-18", "subtitle_chars": "10-22", "tags_count": "0-3" },
+    "points": { "items": "3-5", "body_chars": "35-70" },
+    "timeline": { "steps": "3-5", "body_chars": "30-60" },
+    "card": { "body_chars": "40-100", "tips": "0-4" },
+    "free": { "paragraphs": "1-4", "para_chars": "40-90" },
+    "quote": { "text_chars": "12-48" },
+    "compare": { "rows": "4-6", "value_chars": "8-18" },
+    "summary": { "items": "3-5" },
+    "ending": { "tags": "5-10", "cta": "1-2条" }
+  },
+  "anti_patterns": [
+    {
+      "id": "resume-tone",
+      "name": "简历腔",
+      "signals": ["负责", "参与", "协助", "具备…能力", "熟悉…框架", "项目经历", "工作职责"],
+      "fix": "改成场景+动作+结果：「当时…我做了…所以…」"
+    },
+    {
+      "id": "no-hook",
+      "name": "无 hook 标题",
+      "signals": ["笔记", "分享", "记录", "总结一篇", "关于XX的", "浅谈"],
+      "fix": "加数字/问句/反差/亲历感"
+    },
+    {
+      "id": "emoji-in-page",
+      "name": "页内 emoji",
+      "signals": ["😀", "🔥", "✅", "❌", "👉", "💡"],
+      "fix": "删除；可用 > * ◆ — 做视觉分隔"
+    },
+    {
+      "id": "vague-body",
+      "name": "空洞正文",
+      "signals": ["很重要", "要注意", "因人而异", "仅供参考", "多多练习"],
+      "fix": "补具体场景、数字（约/大概）、可执行动作"
+    },
+    {
+      "id": "title-stuffing",
+      "name": "标题堆砌",
+      "signals": ["竖线分隔超过2次", "最全", "独家", "必看", "天花板"],
+      "fix": "压到 20 字内一个核心 hook"
+    },
+    {
+      "id": "fabricated-precision",
+      "name": "编造精确数据",
+      "signals": ["精确百分比无约字", "精确小时数无亲测/大概"],
+      "fix": "删数字或加「约/亲测/我这边」"
+    },
+    {
+      "id": "duplicate-pull-quote",
+      "name": "金句与正文重复",
+      "signals": ["pullQuote 与 paragraphs 同句", "文内拉引复制整段"],
+      "fix": "删 pullQuote 或改成面试官原话/单句提炼，勿整段复制"
+    }
+  ],
+  "high_score_patterns": [
+    {
+      "name": "面经 STAR 翻页",
+      "abstract": "封面问句→章节进度→阶梯时间线写情境/任务/行动/结果→黑底原话→指标收束→标签墙",
+      "content_type": "面经"
+    },
+    {
+      "name": "干货数字清单",
+      "abstract": "封面「N个方法」→双页要点不同版式→对比表纠错→一句话总结→收藏 CTA",
+      "content_type": "干货"
+    },
+    {
+      "name": "避坑 ledger",
+      "abstract": "封面数字冲击→账本行写「坑+后果」→正确做法对比→结尾攒人品",
+      "content_type": "清单"
+    },
+    {
+      "name": "好奇链式标题",
+      "abstract": "标题留一半答案在正文；caption 首句复述痛点，末句轻 CTA",
+      "content_type": "干货"
+    }
+  ]
+}

@@ -1,0 +1,636 @@
+{
+  "version": "1.0",
+  "canvas": "1080x1440",
+  "notes": "每页 type 可选 layoutVariant；points 的 ledger/cards 与 layoutVariant 互通，setPointsLayout 仍可用。",
+  "page_types": {
+    "cover": {
+      "default": "default",
+      "variants": [
+        {
+          "id": "default",
+          "name": "经典大字封面",
+          "description": "kicker + 超大标题 + 副标，居中纵向留白，信息流第一眼 hook。",
+          "css_class": "cover-variant-default",
+          "best_for": ["干货", "面经", "清单"],
+          "html_ref": "xhs-templates/xhs-literary.html",
+          "xhs_pattern": "爆款封面：主标题占上半屏，副标一行说清收益"
+        },
+        {
+          "id": "magazine",
+          "name": "杂志分栏封面",
+          "description": "左文右装饰/图，衬线标题 + 细线 kicker，偏 editorial 专题感。",
+          "css_class": "cover-variant-magazine",
+          "best_for": ["干货", "面经"],
+          "html_ref": "xhs-templates/xhs-literary.html",
+          "xhs_pattern": "杂志风左右分栏：左金句右质感底图（Reditor 高赞模板二）"
+        },
+        {
+          "id": "number-shock",
+          "name": "数字冲击封面",
+          "description": "超大数字/量化词作主视觉，标题次级，适合「N 个方法」「X 天搞定」。",
+          "css_class": "cover-variant-number-shock",
+          "best_for": ["清单", "干货"],
+          "html_ref": "xhs-templates/xhs-bold-signal.html",
+          "xhs_pattern": "干货合集：数字 + 核心内容 + 结果价值"
+        },
+        {
+          "id": "question-hook",
+          "name": "问题式封面",
+          "description": "标题以问句/反问开场，副标给答案预告，制造好奇翻页。",
+          "css_class": "cover-variant-question",
+          "best_for": ["面经", "干货"],
+          "html_ref": "xhs-templates/xhs-orange.html",
+          "xhs_pattern": "痛点前置 + 引人好奇的疑问句标题"
+        },
+        {
+          "id": "hero-split",
+          "name": "上图下文封面",
+          "description": "上半屏主图 + 下半紧凑标题区，探店/现场/截图类。",
+          "css_class": "cover-variant-hero-split",
+          "best_for": ["干货", "面经"],
+          "html_ref": "xhs-templates/xhs-ins.html",
+          "xhs_pattern": "上下拼图 + 重点标签（穿搭/美食/好物类爆款结构）"
+        }
+      ]
+    },
+    "points": {
+      "default": "cards",
+      "variants": [
+        {
+          "id": "cards",
+          "name": "卡片要点",
+          "description": "编号 pill + 左色条卡片，每条 head+body 饱满。",
+          "css_class": "points-variant-cards",
+          "layout_key": "cards",
+          "best_for": ["干货", "清单"],
+          "html_ref": "xhs-templates/xhs-ins.html",
+          "xhs_pattern": "知识卡片：分点阐述，图文并茂"
+        },
+        {
+          "id": "ledger",
+          "name": "账本清单行",
+          "description": "全宽行 + 序号 + 后果说明，导购/避坑清单感。",
+          "css_class": "points-variant-ledger",
+          "layout_key": "ledger",
+          "best_for": ["清单", "干货"],
+          "html_ref": "xhs-templates/xhs-ins.html",
+          "xhs_pattern": "避坑排雷：坑点 + 解决方案逐条罗列"
+        },
+        {
+          "id": "numbered-pill",
+          "name": "编号 Pill 强调",
+          "description": "更大圆形序号 + 紧凑正文，扫读型清单。",
+          "css_class": "points-variant-numbered-pill",
+          "layout_key": "cards",
+          "best_for": ["清单", "干货"],
+          "html_ref": "xhs-templates/xhs-terminal.html",
+          "xhs_pattern": "短横线/圆点分隔的清单体"
+        },
+        {
+          "id": "left-bar",
+          "name": "左色条要点",
+          "description": "无 pill、粗色条 + 标题加粗，偏严肃干货/面经要点。",
+          "css_class": "points-variant-left-bar",
+          "layout_key": "cards",
+          "best_for": ["面经", "干货"],
+          "html_ref": "xhs-templates/xhs-literary.html",
+          "xhs_pattern": "十字一标三行一段的信息密度排版"
+        },
+        {
+          "id": "pill-tags",
+          "name": "标签 Pill 要点",
+          "description": "每条 head 前彩色 tag pill，扫读分类感。",
+          "css_class": "points-variant-pill-tags",
+          "layout_key": "cards",
+          "best_for": ["清单", "干货"],
+          "html_ref": "xhs-templates/xhs-ins.html",
+          "xhs_pattern": "分类标签 + 要点正文"
+        },
+        {
+          "id": "left-bar-minimal",
+          "name": "极简左条",
+          "description": "无卡片底、细色条 + 紧凑行，高密度清单。",
+          "css_class": "points-variant-left-bar-minimal",
+          "layout_key": "cards",
+          "best_for": ["清单", "面经"],
+          "html_ref": "xhs-templates/xhs-literary.html",
+          "xhs_pattern": "极简竖线分隔的干货列表"
+        }
+      ]
+    },
+    "timeline": {
+      "default": "vertical-rail",
+      "variants": [
+        {
+          "id": "vertical-rail",
+          "name": "竖线时间轴",
+          "description": "左侧竖轨 + 圆点 + 步骤卡片，默认教程/流程感。",
+          "css_class": "timeline-variant-vertical-rail",
+          "best_for": ["干货", "面经"],
+          "html_ref": "xhs-templates/xhs-terminal.html",
+          "xhs_pattern": "教程攻略：步骤分解 + 注意事项"
+        },
+        {
+          "id": "horizontal-steps",
+          "name": "横向步骤条",
+          "description": "步骤横向排列 + 连接箭头，适合 3-4 步短流程。",
+          "css_class": "timeline-variant-horizontal",
+          "best_for": ["干货"],
+          "html_ref": "xhs-templates/xhs-orange.html",
+          "xhs_pattern": "全屏长图分段标题：第一步/第二步"
+        },
+        {
+          "id": "number-ladder",
+          "name": "数字阶梯",
+          "description": "大号阶段序号递进，STAR/面试阶段叙事。",
+          "css_class": "timeline-variant-ladder",
+          "best_for": ["面经"],
+          "html_ref": "xhs-templates/xhs-orange.html",
+          "xhs_pattern": "个人故事：情境-任务-行动-结果递进"
+        }
+      ]
+    },
+    "quote": {
+      "default": "sidebar",
+      "variants": [
+        {
+          "id": "sidebar",
+          "name": "侧栏引用",
+          "description": "左竖线 + 斜体金句，默认节奏呼吸页。",
+          "css_class": "quote-variant-sidebar",
+          "best_for": ["面经", "干货"],
+          "html_ref": "xhs-templates/xhs-literary.html",
+          "xhs_pattern": "故事转折金句：翻页记忆点"
+        },
+        {
+          "id": "centered-hero",
+          "name": "居中大字金句",
+          "description": "全屏居中超大字，极少装饰，情绪共鸣。",
+          "css_class": "quote-variant-centered",
+          "best_for": ["面经"],
+          "html_ref": "xhs-templates/xhs-bold-signal.html",
+          "xhs_pattern": "观点文核心论断单独成页"
+        },
+        {
+          "id": "invert-dark",
+          "name": "黑底反转金句",
+          "description": "深色底 + 浅色大字，强对比记忆锚。",
+          "css_class": "quote-variant-invert",
+          "best_for": ["面经", "干货"],
+          "html_ref": "xhs-templates/xhs-bold-signal.html",
+          "xhs_pattern": "硬核对比/信号风笔记中的停顿页"
+        },
+        {
+          "id": "left-bar",
+          "name": "左竖条金句",
+          "description": "粗色条 + 斜体正文，侧栏引用加强版。",
+          "css_class": "quote-variant-left-bar",
+          "best_for": ["面经", "干货"],
+          "html_ref": "xhs-templates/xhs-literary.html",
+          "xhs_pattern": "故事转折金句：翻页记忆点"
+        },
+        {
+          "id": "center-hero",
+          "name": "居中大字金句",
+          "description": "全屏居中超大字（center-hero 别名）。",
+          "css_class": "quote-variant-center-hero",
+          "best_for": ["面经"],
+          "html_ref": "xhs-templates/xhs-bold-signal.html",
+          "xhs_pattern": "观点文核心论断单独成页"
+        },
+        {
+          "id": "inverted-block",
+          "name": "反转色块金句",
+          "description": "整页深色块 + 浅色字（invert-dark 别名）。",
+          "css_class": "quote-variant-inverted-block",
+          "best_for": ["面经", "干货"],
+          "html_ref": "xhs-templates/xhs-bold-signal.html",
+          "xhs_pattern": "硬核对比停顿页"
+        }
+      ]
+    },
+    "compare": {
+      "default": "three-col",
+      "variants": [
+        {
+          "id": "three-col",
+          "name": "三列对比卡",
+          "description": "维度 + 负/正/中性列，卡片化非 Excel。",
+          "css_class": "compare-variant-three-col",
+          "best_for": ["干货", "清单"],
+          "html_ref": "xhs-templates/xhs-bold-signal.html",
+          "xhs_pattern": "对比测评：多维度差异表"
+        },
+        {
+          "id": "two-col",
+          "name": "双列对决",
+          "description": "A vs B 两列大卡片，决策更直观。",
+          "css_class": "compare-variant-two-col",
+          "best_for": ["清单", "干货"],
+          "html_ref": "xhs-templates/xhs-ins.html",
+          "xhs_pattern": "二选一方案对比"
+        },
+        {
+          "id": "swipe-before-after",
+          "name": "前后滑动感",
+          "description": "左右分屏 before/after 色块，模拟滑动对比。",
+          "css_class": "compare-variant-swipe",
+          "best_for": ["干货"],
+          "html_ref": "xhs-templates/xhs-bold-signal.html",
+          "xhs_pattern": "Before/After 转变展示"
+        },
+        {
+          "id": "minimal",
+          "name": "极简对比",
+          "description": "轻边框、弱色块，信息密度高时更干净。",
+          "css_class": "compare-variant-minimal",
+          "best_for": ["干货", "清单"],
+          "html_ref": "xhs-templates/xhs-ins.html",
+          "xhs_pattern": "轻量参数对照"
+        },
+        {
+          "id": "cards",
+          "name": "卡片对比",
+          "description": "默认三列卡片堆叠，与 three-col 同渲染。",
+          "css_class": "compare-variant-three-col",
+          "best_for": ["干货", "清单"],
+          "html_ref": "xhs-templates/xhs-bold-signal.html",
+          "xhs_pattern": "多维度差异表"
+        },
+        {
+          "id": "before-after",
+          "name": "前后对比",
+          "description": "swipe-before-after 别名，左右分屏决策感。",
+          "css_class": "compare-variant-swipe",
+          "best_for": ["干货"],
+          "html_ref": "xhs-templates/xhs-bold-signal.html",
+          "xhs_pattern": "Before/After 转变展示"
+        }
+      ]
+    },
+    "summary": {
+      "default": "checklist-cards",
+      "variants": [
+        {
+          "id": "checklist-cards",
+          "name": "清单收束卡",
+          "description": "编号 summary-card 列表，Takeaway 清单。",
+          "css_class": "summary-variant-checklist",
+          "best_for": ["干货", "清单", "面经"],
+          "html_ref": "xhs-templates/xhs-literary.html",
+          "xhs_pattern": "结尾总结一句话 + 收藏引导前的要点复述"
+        },
+        {
+          "id": "metrics-tower",
+          "name": "指标塔",
+          "description": "大号 metrics 数字 + 少量条目，数据结论页。",
+          "css_class": "summary-variant-metrics",
+          "best_for": ["干货"],
+          "html_ref": "xhs-templates/xhs-terminal.html",
+          "xhs_pattern": "量化结果/复盘数据展示"
+        },
+        {
+          "id": "one-liner-close",
+          "name": "一句话收束",
+          "description": "超大收束句 + 极简副点，情绪/行动导向。",
+          "css_class": "summary-variant-oneliner",
+          "best_for": ["面经", "干货"],
+          "html_ref": "xhs-templates/xhs-literary.html",
+          "xhs_pattern": "总分总：末段核心结论前置"
+        },
+        {
+          "id": "checklist",
+          "name": "勾选清单体",
+          "description": "对勾 + 行内条目，无编号卡片，轻量收束。",
+          "css_class": "summary-variant-checklist-plain",
+          "best_for": ["干货", "清单"],
+          "html_ref": "xhs-templates/xhs-ins.html",
+          "xhs_pattern": "待办/核对清单式总结"
+        },
+        {
+          "id": "metric-cards",
+          "name": "指标卡片",
+          "description": "metrics 独立大卡片 + 可选副条目。",
+          "css_class": "summary-variant-metric-cards",
+          "best_for": ["干货"],
+          "html_ref": "xhs-templates/xhs-terminal.html",
+          "xhs_pattern": "数据结论卡片墙"
+        },
+        {
+          "id": "one-liner-stack",
+          "name": "金句叠放",
+          "description": "多条一句话纵向叠放，节奏型收束。",
+          "css_class": "summary-variant-oneliner-stack",
+          "best_for": ["面经", "干货"],
+          "html_ref": "xhs-templates/xhs-literary.html",
+          "xhs_pattern": "多句核心结论连打"
+        }
+      ]
+    },
+    "ending": {
+      "default": "cta-pill",
+      "variants": [
+        {
+          "id": "cta-pill",
+          "name": "CTA 按钮感",
+          "description": "圆角 CTA 条 + 短 desc，收藏/关注行动。",
+          "css_class": "ending-variant-cta",
+          "best_for": ["干货", "清单", "面经"],
+          "html_ref": "xhs-templates/xhs-ins.html",
+          "xhs_pattern": "戳左下角/收藏备用类转化话术"
+        },
+        {
+          "id": "tag-wall",
+          "name": "话题标签墙",
+          "description": "多行 hashtag 铺满下半屏，利于搜索分发。",
+          "css_class": "ending-variant-tag-wall",
+          "best_for": ["面经", "干货"],
+          "html_ref": "xhs-templates/xhs-orange.html",
+          "xhs_pattern": "话题标签聚合：秋招/面经/实习"
+        },
+        {
+          "id": "follow-guide",
+          "name": "关注引导",
+          "description": "作者区放大 + 关注理由三条 + CTA。",
+          "css_class": "ending-variant-follow",
+          "best_for": ["干货", "面经"],
+          "html_ref": "xhs-templates/xhs-literary.html",
+          "xhs_pattern": "固定结束语 + 引导关注"
+        }
+      ]
+    },
+    "photo": {
+      "default": "hero-dominant",
+      "variants": [
+        {
+          "id": "hero-dominant",
+          "name": "大图主导",
+          "description": "图占 70%+ 画布，底部短 caption。",
+          "css_class": "photo-variant-hero",
+          "best_for": ["干货"],
+          "html_ref": "xhs-templates/xhs-botanical.html",
+          "xhs_pattern": "图大字短：现场观察/探店"
+        },
+        {
+          "id": "caption-overlay",
+          "name": "图上叠字",
+          "description": "底部渐变遮罩 + 标题叠在图上。",
+          "css_class": "photo-variant-overlay",
+          "best_for": ["干货", "面经"],
+          "html_ref": "xhs-templates/xhs-ins.html",
+          "xhs_pattern": "截图证据 + 一句解读"
+        },
+        {
+          "id": "split-caption",
+          "name": "上下分栏图注",
+          "description": "上图下文对半，适合说明型截图。",
+          "css_class": "photo-variant-split",
+          "best_for": ["面经", "干货"],
+          "html_ref": "xhs-templates/xhs-terminal.html",
+          "xhs_pattern": "每张图只讲一个卖点"
+        }
+      ]
+    },
+    "gallery": {
+      "default": "grid-balanced",
+      "variants": [
+        {
+          "id": "grid-balanced",
+          "name": "均衡网格",
+          "description": "2x2 / 3 列均衡拼图 + 顶标题。",
+          "css_class": "gallery-variant-grid",
+          "best_for": ["干货"],
+          "html_ref": "xhs-templates/xhs-ins.html",
+          "xhs_pattern": "多图证据墙"
+        },
+        {
+          "id": "mosaic-feature",
+          "name": "马赛克主图",
+          "description": "一大图 + 多小图不规则拼贴。",
+          "css_class": "gallery-variant-mosaic",
+          "best_for": ["干货", "面经"],
+          "html_ref": "xhs-templates/xhs-brutalist.html",
+          "xhs_pattern": "作品/截图合集展示"
+        },
+        {
+          "id": "filmstrip",
+          "name": "胶片条",
+          "description": "横向三图胶片条 + 上下留白，节奏轻快。",
+          "css_class": "gallery-variant-filmstrip",
+          "best_for": ["干货"],
+          "html_ref": "xhs-templates/xhs-botanical.html",
+          "xhs_pattern": "步骤截图连续展示"
+        }
+      ]
+    },
+    "chapter": {
+      "default": "number-hero",
+      "variants": [
+        {
+          "id": "number-hero",
+          "name": "章节巨号",
+          "description": "超大 chapter-no + 标题，默认章节分隔。",
+          "css_class": "chapter-variant-number",
+          "best_for": ["干货", "面经"],
+          "html_ref": "xhs-templates/xhs-literary.html",
+          "xhs_pattern": "长文章节：读者知道讲到哪"
+        },
+        {
+          "id": "minimal-rule",
+          "name": "极简线章",
+          "description": "细线 + 小序号 + 标题，轻量呼吸。",
+          "css_class": "chapter-variant-minimal",
+          "best_for": ["干货"],
+          "html_ref": "xhs-templates/xhs-ins.html",
+          "xhs_pattern": "分段副标题过渡"
+        },
+        {
+          "id": "progress-band",
+          "name": "进度条章节",
+          "description": "顶部进度带 + 章节名，长文导航感。",
+          "css_class": "chapter-variant-progress",
+          "best_for": ["干货", "面经"],
+          "html_ref": "xhs-templates/xhs-orange.html",
+          "xhs_pattern": "全屏长图分段：第一站/第二章"
+        },
+        {
+          "id": "roman-numeral",
+          "name": "罗马序号章",
+          "description": "I / II / III 章节序号，editorial 专题感。",
+          "css_class": "chapter-variant-roman",
+          "best_for": ["干货", "面经"],
+          "html_ref": "xhs-templates/xhs-literary.html",
+          "xhs_pattern": "杂志专题章节编号"
+        },
+        {
+          "id": "big-number",
+          "name": "超大章节号",
+          "description": "比默认更大的 chapter-no，强分隔。",
+          "css_class": "chapter-variant-big-number",
+          "best_for": ["干货"],
+          "html_ref": "xhs-templates/xhs-bold-signal.html",
+          "xhs_pattern": "数字章节冲击"
+        },
+        {
+          "id": "divider-heavy",
+          "name": "重分割线章",
+          "description": "双线/多线分割 + 章节名，仪式感过渡。",
+          "css_class": "chapter-variant-divider-heavy",
+          "best_for": ["面经", "干货"],
+          "html_ref": "xhs-templates/xhs-literary.html",
+          "xhs_pattern": "章节转场仪式感"
+        }
+      ]
+    },
+    "composite": {
+      "default": "stack-blocks",
+      "variants": [
+        {
+          "id": "stack-blocks",
+          "name": "纵向模块栈",
+          "description": "2-4 块纵向堆叠，默认 composite。",
+          "css_class": "composite-variant-stack",
+          "best_for": ["干货", "清单"],
+          "html_ref": "xhs-templates/xhs-brutalist.html",
+          "xhs_pattern": "一页多模块压信息密度"
+        },
+        {
+          "id": "split-dual",
+          "name": "上下双模块",
+          "description": "上下各一半模块，对比或并列。",
+          "css_class": "composite-variant-split",
+          "best_for": ["干货"],
+          "html_ref": "xhs-templates/xhs-literary.html",
+          "xhs_pattern": "要点 + 金句同页"
+        },
+        {
+          "id": "accent-rail",
+          "name": "侧轨混排",
+          "description": "左侧色轨串联多块，杂志专栏感。",
+          "css_class": "composite-variant-rail",
+          "best_for": ["面经", "干货"],
+          "html_ref": "xhs-templates/xhs-literary.html",
+          "xhs_pattern": "Editorial 混排专栏"
+        }
+      ]
+    },
+    "free": {
+      "default": "editorial",
+      "variants": [
+        {
+          "id": "editorial",
+          "name": "编辑长文",
+          "description": "kicker + 标题 + 多段正文 + 可选 bullets。",
+          "css_class": "free-variant-editorial",
+          "best_for": ["干货"],
+          "html_ref": "xhs-templates/xhs-literary.html",
+          "xhs_pattern": "双栏深度展开/概念讲透"
+        },
+        {
+          "id": "split-column",
+          "name": "左右分栏",
+          "description": "左要点右正文，杂志攻略感。",
+          "css_class": "free-variant-split",
+          "best_for": ["干货", "面经"],
+          "html_ref": "xhs-templates/xhs-literary.html",
+          "xhs_pattern": "杂志风左右分栏内页"
+        },
+        {
+          "id": "pull-quote-inline",
+          "name": "文内拉引",
+          "description": "正文间嵌入大号 pull-quote 行。",
+          "css_class": "free-variant-pullquote",
+          "best_for": ["面经"],
+          "html_ref": "xhs-templates/xhs-literary.html",
+          "xhs_pattern": "故事文穿插金句"
+        },
+        {
+          "id": "magazine-columns",
+          "name": "杂志分栏正文",
+          "description": "双栏正文流，长段落杂志感。",
+          "css_class": "free-variant-magazine-columns",
+          "best_for": ["干货"],
+          "html_ref": "xhs-templates/xhs-literary.html",
+          "xhs_pattern": "双栏深度展开"
+        },
+        {
+          "id": "numbered-paragraphs",
+          "name": "编号段落",
+          "description": "段落前 01/02 序号，教程长文感。",
+          "css_class": "free-variant-numbered-paragraphs",
+          "best_for": ["干货", "面经"],
+          "html_ref": "xhs-templates/xhs-terminal.html",
+          "xhs_pattern": "分段编号讲解"
+        },
+        {
+          "id": "wide-lead",
+          "name": "宽导语段",
+          "description": "首段超大 lead + 正文，开篇抓眼。",
+          "css_class": "free-variant-wide-lead",
+          "best_for": ["干货", "面经"],
+          "html_ref": "xhs-templates/xhs-literary.html",
+          "xhs_pattern": "开篇大导语 + 展开"
+        }
+      ]
+    },
+    "card": {
+      "default": "accent-label",
+      "variants": [
+        {
+          "id": "accent-label",
+          "name": "标签卡片",
+          "description": "label + 标题 + 正文 + tips，默认 card。",
+          "css_class": "card-variant-label",
+          "best_for": ["干货", "清单"],
+          "html_ref": "xhs-templates/xhs-ins.html",
+          "xhs_pattern": "单点 actionable tip 收束"
+        },
+        {
+          "id": "tip-box",
+          "name": "提示框",
+          "description": "虚线边框 tips 强调框，避坑/技巧感。",
+          "css_class": "card-variant-tipbox",
+          "best_for": ["干货", "面经"],
+          "html_ref": "xhs-templates/xhs-terminal.html",
+          "xhs_pattern": "注意事项高亮框"
+        },
+        {
+          "id": "inset-thumb",
+          "name": "缩略图卡片",
+          "description": "右侧 inset 缩略图 + 左文，图文混排。",
+          "css_class": "card-variant-inset",
+          "best_for": ["干货"],
+          "html_ref": "xhs-templates/xhs-ins.html",
+          "xhs_pattern": "图文混排单卖点"
+        },
+        {
+          "id": "sidebar-accent",
+          "name": "侧栏强调卡",
+          "description": "宽色条侧栏 + label 条，干货 tip 感。",
+          "css_class": "card-variant-sidebar-accent",
+          "best_for": ["干货", "面经"],
+          "html_ref": "xhs-templates/xhs-literary.html",
+          "xhs_pattern": "侧栏色块强调单点"
+        },
+        {
+          "id": "icon-bullet",
+          "name": "图标要点卡",
+          "description": "tips 用菱形图标 bullet，清单感。",
+          "css_class": "card-variant-icon-bullet",
+          "best_for": ["清单", "干货"],
+          "html_ref": "xhs-templates/xhs-terminal.html",
+          "xhs_pattern": "注意事项条目化"
+        },
+        {
+          "id": "minimal-center",
+          "name": "极简居中卡",
+          "description": "无侧条、居中排版，呼吸感单卡。",
+          "css_class": "card-variant-minimal-center",
+          "best_for": ["面经"],
+          "html_ref": "xhs-templates/xhs-ins.html",
+          "xhs_pattern": "单句核心 tip 居中"
+        }
+      ]
+    }
+  }
+}

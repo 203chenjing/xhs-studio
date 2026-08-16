@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>小红书一键成图</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/app.css">
+  <link rel="stylesheet" href="/static/css/page.css">
+  <link rel="stylesheet" href="/static/css/wysiwyg.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <div class="brand-name">小红书一键成图</div>
+      <div class="brand-sub">写意图 → 出稿审核 → 改页导出</div>
+    </div>
+    <div class="header-meta">
+      <span class="pill dot" id="health-pill">检测服务…</span>
+      <span class="pill llm-pill" id="llm-session-pill" hidden>LLM ×0</span>
+      <span class="pill save-pill" id="save-pill" hidden>已保存</span>
+      <label class="draft-picker-wrap" id="draft-picker-wrap" hidden>
+        <select id="draft-picker" class="draft-picker" title="切换草稿"></select>
+      </label>
+      <button type="button" class="btn btn-sm mobile-preview-toggle" id="btn-mobile-preview" hidden>全屏预览</button>
+    </div>
+  </header>
+
+  <div id="draft-recovery-bar" class="draft-recovery-bar" hidden role="region" aria-label="恢复草稿">
+    <span class="draft-recovery-msg">发现未完成的草稿，是否恢复？</span>
+    <div class="draft-recovery-actions">
+      <button type="button" class="btn btn-sm btn-primary" id="btn-recover-draft">恢复草稿</button>
+      <button type="button" class="btn btn-sm" id="btn-discard-draft">丢弃</button>
+    </div>
+  </div>
+
+  <div id="mode-banner" class="mode-banner" hidden role="status"></div>
+
+  <div class="flow-bar" id="flow-bar">
+    <nav class="flow-steps" id="flow-steps" aria-label="流程步骤">
+      <div class="flow-step active" data-step="1">
+        <span class="n">1</span>
+        <span class="flow-step-text">
+          <span class="t">写意图</span>
+          <span class="eta" data-eta="intent">即时</span>
+        </span>
+      </div>
+      <div class="flow-step" data-step="2">
+        <span class="n">2</span>
+        <span class="flow-step-text">
+          <span class="t">出稿审核</span>
+          <span class="eta" data-eta="compose">①写稿 + ②审核</span>
+          <span class="sub" id="flow-sub-2" hidden></span>
+        </span>
+      </div>
+      <div class="flow-step" data-step="3">
+        <span class="n">3</span>
+        <span class="flow-step-text">
+          <span class="t">改页导出</span>
+          <span class="eta" data-eta="layout">可单页改 · 本地导出</span>
+        </span>
+      </div>
+    </nav>
+    <div class="flow-status" id="flow-status" hidden aria-live="polite">
+      <div class="flow-status-main">
+        <span class="flow-status-dot" aria-hidden="true"></span>
+        <span class="flow-status-label" id="flow-status-label">处理中…</span>
+        <button type="button" class="btn btn-sm" id="btn-cancel-request" hidden>取消</button>
+      </div>
+      <div class="flow-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="处理进度">
+        <div class="flow-progress-track"><div class="flow-progress-fill"></div></div>
+        <div class="flow-progress-meta">
+          <span class="flow-progress-caption">处理中…</span>
+          <span class="flow-progress-elapsed" hidden></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main class="app-main" id="app-main">
+    <aside class="panel" id="side-panel">
+      <div class="panel-sticky-cta" id="sticky-cta" hidden>
+        <button type="button" id="btn-confirm-layout" class="btn btn-primary" disabled>确认继续排版</button>
+        <p class="review-force-hint" id="review-force-hint" hidden></p>
+      </div>
+      <div class="panel-scroll">
+        <section class="section hero-input" id="hero-section">
+          <div id="intent-summary" class="intent-summary" hidden>
+            <div class="intent-summary-head">
+              <span class="intent-summary-label">当前意图</span>
+              <button type="button" class="btn btn-sm" id="btn-expand-intent">改意图</button>
+            </div>
+            <p class="intent-summary-text" id="intent-summary-text"></p>
+          </div>
+          <div id="intent-editor">
+            <label class="label" for="intent">想发什么？</label>
+            <textarea id="intent" class="textarea textarea-lg" placeholder="例如：写一套秋招投递清单 / 一段实习复盘故事 / 白天 vs 夜游对比——按内容自由组页，不必套固定模板"></textarea>
+
+            <details class="details supplement-details" id="supplement-details" style="margin-top:12px">
+              <summary>补充信息</summary>
+              <p class="supplement-hint">面试纪要 / 事实 / 禁忌 — 改文案时会参考，不会原样泄露隐私</p>
+              <textarea id="supplement-context" class="textarea" rows="3" placeholder="例如：三面挂在项目细节；可用 STAR 但勿写公司全名；语气偏克制…"></textarea>
+            </details>
+
+            <div class="photo-section" style="margin-top:14px">
+              <label class="label">添加图片（可选，最多 9 张）</label>
+              <div id="photo-drop" class="photo-drop" tabindex="0" role="button" aria-label="添加图片，最多9张">
+                <input id="photo-input" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden />
+                <div class="photo-drop-text">添加图片</div>
+                <div class="photo-drop-hint">点击或拖拽 · jpg / png / webp · 单张 ≤5MB</div>
+              </div>
+              <div id="photo-thumbs" class="photo-thumbs"></div>
+            </div>
+
+            <button id="btn-generate" class="btn btn-primary btn-hero" style="margin-top:16px">生成并审核</button>
+            <button type="button" id="btn-retry-generate" class="btn btn-retry" hidden>一键重试（同一请求）</button>
+            <p class="hero-eta-hint" id="hero-eta-hint">主路径 2 次调用：①写稿 + ②审核</p>
+            <p class="hero-demo-hint" id="hero-demo-hint">未配置 API Key 时为 <strong>Demo 模式</strong>：本地样例 + 规则审核，非完整 AI 质检。</p>
+          </div>
+
+          <div class="progress-wrap" id="progress-wrap">
+            <div class="progress-stage" id="progress-stage">① 写稿</div>
+            <div class="progress-label" id="progress-label">正在生成全文…</div>
+            <div class="progress-meta" id="progress-meta"></div>
+            <div class="flow-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="处理进度">
+              <div class="flow-progress-track"><div class="flow-progress-fill"></div></div>
+              <div class="flow-progress-meta">
+                <span class="flow-progress-caption">处理中…</span>
+                <span class="flow-progress-elapsed" hidden></span>
+              </div>
+            </div>
+          </div>
+          <div class="status-line" id="status" role="status" aria-live="polite" aria-atomic="true"></div>
+
+          <details class="details" style="margin-top:14px" id="author-details">
+            <summary>高级 · 作者信息</summary>
+            <div class="row-2" style="margin-top:10px">
+              <div>
+                <label class="label" for="author">作者昵称</label>
+                <input id="author" class="field" value="" placeholder="你的昵称" />
+              </div>
+              <div>
+                <label class="label" for="brand">品牌 / 账号</label>
+                <input id="brand" class="field" value="" placeholder="可选，如 @你的账号" />
+              </div>
+            </div>
+          </details>
+        </section>
+
+        <section class="section" id="review-panel" hidden>
+          <div class="section-title-row">
+            <div class="section-title">文段审核</div>
+            <span id="review-layout-badge" class="review-layout-badge" hidden></span>
+          </div>
+          <div id="review-verdict" class="review-verdict">等待审核…</div>
+          <div id="review-issues" class="review-issues"></div>
+
+          <div class="review-actions">
+            <button type="button" id="btn-apply-review" class="btn" disabled>按意见改写</button>
+            <button type="button" id="btn-rerun-review" class="btn" disabled>重新审核</button>
+          </div>
+
+          <div class="copy-block" style="margin-top:14px">
+            <div class="copy-head">
+              <span>标题</span>
+              <button type="button" class="btn btn-sm" id="btn-copy-title">复制</button>
+            </div>
+            <input id="title" class="field" placeholder="主推标题（发帖标题栏）" />
+            <div class="hooks-inline" id="hooks" aria-label="标题候选"></div>
+          </div>
+          <div class="copy-block" style="margin-top:10px">
+            <div class="copy-head">
+              <span>正文 + 话题</span>
+              <button type="button" class="btn btn-sm" id="btn-copy-caption">复制</button>
+            </div>
+            <textarea id="caption" class="caption-box" placeholder="生成后显示 caption"></textarea>
+          </div>
+
+          <details class="details review-extra" open style="margin-top:14px">
+            <summary>结构大纲 / 页面摘要</summary>
+            <div id="logic-theme" class="logic-theme" hidden style="margin-top:10px"></div>
+            <ol id="logic-summary" class="logic-summary"></ol>
+            <div class="section-title muted" style="margin-top:12px">页面摘要</div>
+            <div id="page-summary" class="page-summary"></div>
+          </details>
+        </section>
+
+        <section class="section" id="manuscript-panel" hidden>
+          <div class="section-title">全文一览</div>
+          <p class="manuscript-hint">通读全部页文案；点击段落可跳到对应页编辑</p>
+          <div id="manuscript-meta" class="manuscript-meta" hidden></div>
+          <div id="manuscript-list" class="manuscript-list"></div>
+        </section>
+
+        <section class="section" id="post-gen-panel">
+          <div id="copilot-panel" class="copilot-panel" hidden aria-label="AI 改页助手">
+            <div class="copilot-head">
+              <div class="section-title">改页助手</div>
+              <span class="copilot-llm-badge" id="copilot-llm-badge" hidden>LLM ×0</span>
+            </div>
+            <p class="copilot-intro" id="copilot-lock-hint" hidden>出稿后点预览区「开始编辑」，再用自然语言改本页</p>
+            <p class="supplement-copilot-hint" id="supplement-copilot-hint" hidden>已加载补充信息，将用于改文案</p>
+            <div class="copilot-context" id="copilot-context" hidden></div>
+            <div class="copilot-thread" id="copilot-thread" role="log" aria-live="polite"></div>
+            <div class="copilot-chips" id="copilot-chips" aria-label="快捷建议"></div>
+            <div class="copilot-input-bar">
+              <textarea id="copilot-input" class="copilot-input" rows="2" autocomplete="off" placeholder="描述想怎么改，空着=智能优化本页" aria-label="改页指令"></textarea>
+              <button type="button" id="copilot-send" class="btn btn-primary copilot-send" disabled>发送</button>
+            </div>
+            <div class="copilot-footer">
+              <details class="ai-history-menu" id="ai-history-menu">
+                <summary class="btn btn-sm ai-history-trigger" title="撤销与历史">撤销</summary>
+                <div class="ai-history-dropdown" role="menu">
+                  <button type="button" id="btn-history-undo" class="ai-history-item" disabled role="menuitem">撤销上一步</button>
+                  <button type="button" id="btn-history-redo" class="ai-history-item" disabled role="menuitem">重做</button>
+                  <button type="button" id="btn-page-undo" class="ai-history-item" disabled role="menuitem">撤销本页 AI</button>
+                </div>
+              </details>
+              <div id="needs-rereview" class="needs-rereview" hidden>内容已改，导出前将提示复审</div>
+            </div>
+          </div>
+
+          <div class="section-title" style="margin-top:14px">排版与风格</div>
+          <div class="theme-recommend" id="theme-recommend"></div>
+          <button type="button" class="btn btn-sm theme-toggle-btn" id="btn-theme-more">换风格</button>
+          <div class="theme-grid" id="theme-grid"></div>
+
+          <div class="layout-ideas-block">
+            <button type="button" id="btn-layout-ideas" class="btn btn-sm btn-layout-ideas" disabled>给我 3 种排版思路</button>
+            <p class="layout-ideas-intro">基于当前页生成 3 套版式，预览满意后再应用</p>
+            <div id="layout-ideas" class="layout-ideas" hidden></div>
+          </div>
+
+          <details class="details" style="margin-top:14px">
+            <summary>高级 · 导出倍率 / DATA JSON</summary>
+            <div style="margin-top:10px">
+              <label class="label" for="export-scale">导出倍率（pixelRatio，勿再双重放大）</label>
+              <select id="export-scale" class="scale-select" title="导出倍率">
+                <option value="2" selected>2×（推荐）</option>
+                <option value="1">1×</option>
+              </select>
+            </div>
+            <textarea id="json-view" readonly style="margin-top:10px"></textarea>
+          </details>
+        </section>
+        <details class="details timing-log-panel" id="timing-log-panel" hidden>
+          <summary>运行日志</summary>
+          <p class="timing-log-empty" id="timing-log-empty">尚无文案生成记录</p>
+          <ul id="timing-log-list" class="timing-log-list" aria-live="polite"></ul>
+        </details>
+      </div>
+    </aside>
+
+    <section class="preview-panel" id="preview-panel">
+      <div class="preview-toolbar">
+        <div class="toolbar-left">
+          <button type="button" class="btn btn-sm" id="btn-prev" disabled>上一页</button>
+          <button type="button" class="btn btn-sm" id="btn-next" disabled>下一页</button>
+          <button type="button" class="btn btn-sm" id="btn-page-dup" disabled title="复制本页">复制</button>
+          <button type="button" class="btn btn-sm" id="btn-page-del" disabled title="删除本页">删页</button>
+          <button type="button" class="btn btn-sm" id="btn-page-add" disabled title="在后面加一页">加页</button>
+          <span id="page-type-label" class="page-type-label"></span>
+          <span id="preview-mode-tag" class="preview-mode-tag" hidden>只读预览</span>
+          <button type="button" class="btn btn-sm btn-accent" id="btn-start-edit" hidden>开始编辑</button>
+        </div>
+        <div class="toolbar-right">
+          <button type="button" class="btn btn-sm mobile-preview-close" id="btn-mobile-close" hidden>返回编辑</button>
+          <span id="pack-hint" class="pack-hint">确认排版后可导出</span>
+          <button id="btn-export" class="btn btn-sm btn-export" disabled>导出发布包</button>
+        </div>
+      </div>
+
+      <div id="export-blockers-bar" class="export-blockers-bar" hidden role="region" aria-label="导出校验">
+        <span class="export-blockers-msg" id="export-blockers-msg"></span>
+        <div class="export-blockers-actions">
+          <button type="button" class="btn btn-sm" id="btn-export-blockers-close">知道了</button>
+        </div>
+      </div>
+
+      <div id="export-rereview-bar" class="export-rereview-bar" hidden role="region" aria-label="导出前复审">
+        <span class="needs-rereview export-rereview-msg">内容已改，导出前建议先复审</span>
+        <div class="export-rereview-actions">
+          <button type="button" class="btn btn-sm btn-primary" id="btn-export-rereview">先复审再导出</button>
+          <button type="button" class="btn btn-sm" id="btn-export-force">直接导出</button>
+          <button type="button" class="btn btn-sm" id="btn-export-cancel">取消</button>
+        </div>
+      </div>
+
+      <div id="preview-wrap">
+        <div id="overflow-badge">
+          <span>内容溢出 · 请精简</span>
+          <button type="button" class="btn btn-sm overflow-action-btn" id="btn-overflow-compact" hidden>变紧凑</button>
+          <button type="button" class="btn btn-sm overflow-action-btn" id="btn-overflow-delete-last" hidden>删最后一条</button>
+          <button type="button" class="btn btn-sm overflow-action-btn" id="btn-overflow-split" hidden>建议拆页</button>
+        </div>
+        <div id="gen-skeleton" class="gen-skeleton" hidden aria-live="polite">
+          <div class="gen-skeleton-card">
+            <div class="gen-skeleton-shine" aria-hidden="true"></div>
+            <div class="gen-skeleton-lines">
+              <span class="sk-line sk-title"></span>
+              <span class="sk-line"></span>
+              <span class="sk-line"></span>
+              <span class="sk-line sk-short"></span>
+            </div>
+            <div class="flow-progress gen-skeleton-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="写稿进度">
+              <div class="flow-progress-track"><div class="flow-progress-fill"></div></div>
+              <div class="flow-progress-meta">
+                <span class="flow-progress-caption" id="gen-skeleton-status">① 写稿中…</span>
+                <span class="flow-progress-elapsed" hidden></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="copilot-ephemeral-bar" class="copilot-ephemeral-bar" hidden>
+          <span class="copilot-ephemeral-label">AI 建议中</span>
+          <div class="copilot-ephemeral-actions">
+            <button type="button" id="btn-ephemeral-apply" class="btn btn-sm btn-primary">应用</button>
+            <button type="button" id="btn-ephemeral-discard" class="btn btn-sm">放弃</button>
+          </div>
+        </div>
+        <div id="preview-stage"></div>
+        <div class="empty-hint" id="empty-hint">输入意图，点「生成并审核」<br>写意图 → 出稿审核 → 改页导出</div>
+      </div>
+
+      <div class="page-controls">
+        <div id="page-nav"></div>
+        <span id="page-indicator">0 / 0</span>
+      </div>
+    </section>
+  </main>
+
+  <div id="export-container"></div>
+  <div id="sr-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="/static/js/api-client.js"></script>
+  <script src="/static/js/project-store.js"></script>
+  <script src="/static/js/a11y.js"></script>
+  <script src="/static/js/field-path.js"></script>
+  <script src="/static/js/layout-catalog.js"></script>
+  <script src="/static/js/ops.js"></script>
+  <script src="/static/js/export-guard.js"></script>
+  <script src="/static/js/deps.js"></script>
+  <script src="/static/js/themes.js"></script>
+  <script src="/static/js/engine.js"></script>
+  <script src="/static/js/manuscript.js"></script>
+  <script src="/static/js/wysiwyg.js"></script>
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

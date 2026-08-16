@@ -1,0 +1,10 @@
+services:
+  xhs-studio:
+    build: .
+    ports:
+      - "8765:8765"
+    env_file:
+      - backend/.env
+    volumes:
+      - ./backend/uploads:/app/backend/uploads
+    restart: unless-stopped
