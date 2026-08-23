@@ -29,3 +29,7 @@ build/
 backend/uploads/
 backend/logs/
 .DS_Store
+# job-tracker-extension local secrets
+job-tracker-extension/.local-settings.json
+job-tracker-extension/dev-api-key.txt
+job-tracker-extension/scripts/_patch.mjs

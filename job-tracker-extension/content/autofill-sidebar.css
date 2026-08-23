@@ -1,0 +1,17 @@
+/* Host shell — sidebar UI lives in Shadow DOM (autofill-sidebar.js) */
+
+#jt-autofill-root {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  overflow: visible;
+  z-index: 2147483646;
+  pointer-events: none;
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+}

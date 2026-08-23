@@ -1,0 +1,163 @@
+{
+  "name": "AI产品通用",
+  "profile": {
+    "personalInfo": {
+      "name": "邱井晨",
+      "gender": "男",
+      "birthDate": "2002-06-19",
+      "phone": "18923146946",
+      "email": "jingchenqiu@qq.com",
+      "idNumber": "44028120020619841X",
+      "idType": "身份证",
+      "ethnicity": "汉族",
+      "politicalStatus": "中共党员",
+      "maritalStatus": "未婚",
+      "qq": "1067842447",
+      "wechat": "q106784247",
+      "country": "中国",
+      "nativePlace": "乐昌市",
+      "nativePlacePath": "广东省/韶关市/乐昌市",
+      "originPlace": "广东省",
+      "currentCity": "上海市",
+      "mailingAddress": "上海市嘉定区上海大学（嘉定校区）宿舍楼F栋212",
+      "highestDegree": "硕士研究生",
+      "graduationYear": "2027",
+      "height": "170",
+      "weight": "70",
+      "healthStatus": "健康",
+      "specialty": "乒乓球",
+      "workYears": "0",
+      "emergencyContactName": "邱锦河",
+      "emergencyContactPhone": "13302800544"
+    },
+    "jobIntent": {
+      "expectedStartDate": "一个月内",
+      "expectedCity": "深圳",
+      "expectedSalary": "15000"
+    },
+    "education": [
+      {
+        "type": "硕士研究生",
+        "degree": "硕士",
+        "school": "上海大学",
+        "college": "管理学院",
+        "major": "管理科学与工程",
+        "gpa": "3.7",
+        "ranking": "前5%",
+        "startDate": "2024-09",
+        "endDate": "2027-05",
+        "trainingMode": "全国普通高等院校全日制"
+      },
+      {
+        "type": "本科",
+        "degree": "本科",
+        "school": "深圳大学",
+        "college": "管理学院",
+        "major": "工商管理",
+        "gpa": "4.05",
+        "ranking": "前3%",
+        "startDate": "2020-09",
+        "endDate": "2024-06",
+        "trainingMode": "全国普通高等院校全日制"
+      }
+    ],
+    "experience": [
+      {
+        "category": "internship",
+        "organization": "携程计算机技术（上海）有限公司",
+        "role": "产品实习生",
+        "startDate": "2025-12",
+        "endDate": "",
+        "description": "项目一：大搜结果页 AI 化改造。面向泛意图搜索场景，参与结果页AI摘要、快筛与亮点模块的需求定义与落地。"
+      },
+      {
+        "category": "internship",
+        "organization": "博世中国投资有限公司",
+        "role": "产品实习生",
+        "startDate": "2025-06",
+        "endDate": "2025-12",
+        "description": "项目：企业知识库智能问答。面向专家咨询场景，参与需求定义、知识库检索链路与问答体验优化。"
+      },
+      {
+        "category": "project",
+        "organization": "结果页对话式导购",
+        "role": "AI产品经理",
+        "startDate": "",
+        "endDate": "",
+        "description": "针对连续决策场景，参与结果页内对话式导购、多轮追问与上下文记忆的需求定义与方案设计。\n1）多轮追问与意图收敛：在页内用自然语言追问逐步收敛意图，将关键词匹配升级为多轮意图理解。\n2）追问交互与联想发起：设计页内多轮流程，底部常驻入口支持键盘/语音发起追问，上下文继承历次搜索与浏览意图。\n3）口语意图与结构化承接：按「语义理解、信息提取、参数结构化、页面承接」抽出槽位并结构化，覆盖10+业务线意图与入参规则。"
+      },
+      {
+        "category": "project",
+        "organization": "大搜智能助手",
+        "role": "AI产品经理",
+        "startDate": "",
+        "endDate": "",
+        "description": "面向搜索排障，参与Agent立项与工作流框架、Playbook设计。\n1）需求洞察与能力边界：梳理工单等入口近一月53+ Case，收敛排障、查数、答疑、巡检四类能力。\n2）Agent工作流框架设计：将跨系统排障抽象为接入→结构化→分诊→规划→执行→校验→报告→反馈八步工作流。\n3）排障 Playbook 与效果验证：按召回、排序、自然语言、索引、口径五类设计 Playbook。上线13+技能、40+工具，结构化准确率95%，采纳率超80%。"
+      },
+      {
+        "category": "project",
+        "organization": "ResumeAI",
+        "role": "AI产品经理",
+        "startDate": "2025-06",
+        "endDate": "2025-12",
+        "description": "以个人经历知识库为底座、JD为压缩目标的AI求职工作台，Multi-Agent+Human-in-the-loop模式。主导产品全生命周期，独立统筹需求、设计、开发及上线全流程。"
+      }
+    ],
+    "campus": [
+      {
+        "title": "深圳大学管理学院团委组织部部长",
+        "organization": "深圳大学管理学院团委",
+        "description": "·以负责人身份，策划组织管理学院「因爱而生」爱心义卖义演活动，活动参与人数达500人，最终累计筹款3265.54元。\n·负责学院青年大学习完成情况，成功实现学院青年大学习参学比从20%到40%，增加人数达500人，平均每期参学人数超过1000人，具有高执行力。",
+        "startDate": "2021-10",
+        "endDate": "2022-05"
+      }
+    ],
+    "awards": [
+      {
+        "date": "2024-06-30",
+        "name": "深圳大学优秀毕业生",
+        "level": "",
+        "description": ""
+      }
+    ],
+    "languages": [
+      {
+        "language": "英语",
+        "certificate": "雅思",
+        "level": "IELTS（雅思）",
+        "score": "7",
+        "proficiency": "熟练",
+        "speaking": "熟练",
+        "reading": "熟练"
+      }
+    ],
+    "computerSkills": [
+      {
+        "name": "数据分析",
+        "proficiency": "熟练"
+      }
+    ],
+    "certificates": [
+      {
+        "date": "",
+        "name": "雅思",
+        "number": "",
+        "description": "7分"
+      }
+    ],
+    "family": [
+      {
+        "name": "邱锦河",
+        "relation": "父亲",
+        "phone": "13302800544",
+        "company": "李大嫂家政",
+        "role": "负责人",
+        "politicalStatus": ""
+      }
+    ],
+    "special": {
+      "selfIntroduction": "1. 主导企业级AI搜索智能化与AI Agent工作流从0到1完整落地：携程、博世双头部AI产品实习背景，聚焦大搜AI智能化、RAG知识库问答、智能Agent工作流搭建核心赛道，完整覆盖需求调研、方案建模、PRD输出、跨团队联调、上线验收、数据迭代的全链路闭环，深刻掌握大模型业务落地核心逻辑与风控边界。\n\n2. 独立承接Agent全模块设计，具备强技术理解力与工程落地能力：实战落地AI快筛、AI摘要卡、商品AI亮点等搜索智能模块，精通Prompt标准化、场景规则设计与全产线落地治理；熟练基于Dify/LangChain搭建Agent工作流，掌握任务分诊、工具编排、证据链校验核心设计；具备RAG架构优化、知识图谱搭配、知识库标准化落地经验，可运用Python/SQL完成指标复盘与效果迭代，高效协同算法、研发、合规团队推动项目闭环。\n\n3. 扎实AI理论功底，双语能力高度适配大模型/AI Agent岗位：硕士管理科学与工程专业、本科工商管理专业，理论体系完整；雅思7分，可无障碍阅读英文大模型技术文档，支持AI产品方案设计、技术调研及跨团队双语协作，胜任高阶AI产品研发落地工作。",
+      "hobbies": "乒乓球"
+    }
+  }
+}

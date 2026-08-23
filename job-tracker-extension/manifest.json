@@ -1,0 +1,53 @@
+{
+  "manifest_version": 3,
+  "name": "校招投递记录",
+  "description": "填投一体：简历版本填表 + 无声捕获台账 + 按需 AI",
+  "version": "1.11.2",
+  "options_page": "options/options.html",
+  "permissions": ["storage", "activeTab", "scripting"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "校招投递记录",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": [
+        "lib/constants.js",
+        "lib/text-utils.js",
+        "lib/fill-session.js",
+        "lib/extractors.js",
+        "lib/extract-heuristics.js",
+        "lib/playwright-fill.js",
+        "lib/fill-engine.js",
+        "lib/ats-profiles.js",
+        "lib/resume-storage.js",
+        "lib/field-mapping.js",
+        "lib/field-matcher.js",
+        "lib/form-section-context.js",
+        "lib/page-snapshot.js",
+        "lib/autofill-runner.js",
+        "lib/dom-scanner.js",
+        "lib/agent-fill.js",
+        "content/content.js",
+        "content/autofill-sidebar.js"
+      ],
+      "css": ["content/content.css", "content/autofill-sidebar.css"],
+      "run_at": "document_idle"
+    }
+  ]
+}

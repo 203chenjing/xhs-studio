@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>编辑简历 · 校招投递记录</title>
+  <link rel="stylesheet" href="../lib/ui-common.css">
+  <link rel="stylesheet" href="resume.css">
+</head>
+<body>
+  <nav class="top-nav">
+    <button type="button" id="back-to-popup" class="nav-back">← 返回扩展</button>
+    <div class="nav-links">
+      <a href="#" id="open-options">设置</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+    <header class="page-header">
+      <div>
+        <h1>编辑简历信息</h1>
+        <p class="desc">粘贴解析 → 预览确认 → 保存版本，填表自动绑定当前版本。</p>
+      </div>
+      <div class="version-bar">
+        <label>简历版本
+          <select id="version-select"></select>
+        </label>
+        <button type="button" id="add-version" class="secondary small">新建</button>
+        <button type="button" id="import-profile-json" class="secondary small">导入 JSON</button>
+        <button type="button" id="import-seed-profile" class="secondary small">导入 AI产品通用</button>
+        <input type="file" id="import-profile-file" accept=".json,application/json" hidden>
+        <input type="text" id="version-name" placeholder="版本名称">
+      </div>
+    </header>
+
+    <div class="step-flow" aria-label="编辑步骤">
+      <span class="step-flow-item active"><span class="step-badge">1</span> 粘贴</span>
+      <span class="step-flow-arrow">→</span>
+      <span class="step-flow-item"><span class="step-badge">2</span> 预览</span>
+      <span class="step-flow-arrow">→</span>
+      <span class="step-flow-item"><span class="step-badge">3</span> 保存</span>
+    </div>
+
+    <div class="resume-layout">
+      <aside class="parse-pane">
+        <section class="paste-section">
+          <div class="pane-head">
+            <span class="step-badge">1</span>
+            <h2>粘贴简历文本</h2>
+          </div>
+          <p class="hint">粘贴后 AI 解析；缺失项会以追问形式引导补全，也可在底部自由粘贴网申表文字。</p>
+          <textarea id="paste-text" rows="10" placeholder="粘贴简历正文…&#10;&#10;示例：&#10;张三 | 13812345678 | zhangsan@example.com&#10;教育经历&#10;硕士 清华大学 计算机科学与技术 2023.09-2026.06"></textarea>
+          <div class="parse-actions">
+            <button type="button" id="parse-paste" class="primary">AI 解析并填入</button>
+            <button type="button" id="parse-local-link" class="link-btn">仅本地快速解析</button>
+          </div>
+          <label class="overwrite-opt">
+            <input type="checkbox" id="parse-overwrite"> 覆盖已有内容
+          </label>
+          <p id="parse-status" class="parse-status" hidden></p>
+
+          <section id="followup-section" class="followup-section" hidden>
+            <div class="followup-head">
+              <h3>AI 追问补全</h3>
+              <span id="followup-progress" class="followup-progress"></span>
+            </div>
+            <p class="followup-hint">以下信息尚未完整识别，请逐条补充；也可在底部直接粘贴网申表/简历片段。</p>
+            <div id="followup-questions" class="followup-questions"></div>
+            <label class="followup-freeform-label">自由补充（粘贴任意文本）
+              <textarea id="followup-freeform" rows="4" placeholder="例如：期望城市上海；紧急联系人邱锦河 13302800544；或粘贴一整段网申表字段…"></textarea>
+            </label>
+            <div class="followup-actions">
+              <button type="button" id="followup-submit" class="primary">提交补充并更新预览</button>
+              <button type="button" id="followup-skip" class="secondary">跳过，直接填入表单</button>
+            </div>
+          </section>
+        </section>
+      </aside>
+
+      <div class="preview-pane">
+        <section class="preview-section" id="preview-section">
+          <div class="pane-head">
+            <span class="step-badge">2</span>
+            <h2>解析预览</h2>
+            <span id="preview-summary" class="preview-summary"></span>
+          </div>
+          <div id="preview-cards" class="preview-cards">
+            <p class="empty-hint">粘贴文本后自动本地预览；点「AI 解析并填入」走 AI 并合并到表单</p>
+          </div>
+        </section>
+
+        <form id="resume-form">
+          <section class="form-section">
+            <div class="pane-head">
+              <span class="step-badge">3</span>
+              <h2>保存到简历库</h2>
+            </div>
+
+            <details class="collapsible" open>
+              <summary>基本信息</summary>
+              <div class="grid">
+                <label>姓名<input name="personalInfo.name"></label>
+                <label>性别<input name="personalInfo.gender" placeholder="男/女"></label>
+                <label>民族<input name="personalInfo.ethnicity"></label>
+                <label>政治面貌<input name="personalInfo.politicalStatus"></label>
+                <label>婚姻状况<input name="personalInfo.maritalStatus"></label>
+                <label>出生日期<input name="personalInfo.birthDate" placeholder="2000-01-01"></label>
+                <label>手机号<input name="personalInfo.phone"></label>
+                <label>邮箱<input name="personalInfo.email"></label>
+                <label>QQ<input name="personalInfo.qq"></label>
+                <label>微信<input name="personalInfo.wechat"></label>
+                <label>证件类型<input name="personalInfo.idType"></label>
+                <label>证件号码<input name="personalInfo.idNumber"></label>
+                <label>国家/地区<input name="personalInfo.country"></label>
+                <label>现居城市<input name="personalInfo.currentCity"></label>
+                <label>通信地址<input name="personalInfo.mailingAddress"></label>
+                <label>最高学历<input name="personalInfo.highestDegree"></label>
+                <label>身高(cm)<input name="personalInfo.height"></label>
+                <label>体重(kg)<input name="personalInfo.weight"></label>
+                <label>健康状况<input name="personalInfo.healthStatus"></label>
+                <label>特长<input name="personalInfo.specialty"></label>
+                <label>工作年限<input name="personalInfo.workYears"></label>
+                <label>紧急联系人<input name="personalInfo.emergencyContactName"></label>
+                <label>紧急联系人电话<input name="personalInfo.emergencyContactPhone"></label>
+                <label>GitHub<input name="personalInfo.github"></label>
+              </div>
+            </details>
+
+            <details class="collapsible">
+              <summary>求职意向</summary>
+              <div class="grid">
+                <label>预计入职时间<input name="jobIntent.expectedStartDate" placeholder="2026-08-31"></label>
+                <label>期望工作城市<input name="jobIntent.expectedCity"></label>
+                <label>期望薪资<input name="jobIntent.expectedSalary"></label>
+              </div>
+            </details>
+
+            <details class="collapsible" open>
+              <summary>
+                教育经历
+                <button type="button" class="secondary small inline-btn" id="add-education">+ 添加</button>
+              </summary>
+              <div id="education-list" class="entry-list"></div>
+            </details>
+
+            <details class="collapsible" open>
+              <summary>
+                项目经历
+                <button type="button" class="secondary small inline-btn" id="add-experience">+ 添加</button>
+              </summary>
+              <div id="experience-list" class="entry-list"></div>
+            </details>
+
+            <details class="collapsible">
+              <summary>获奖情况<button type="button" class="secondary small inline-btn" id="add-award">+ 添加</button></summary>
+              <div id="awards-list" class="entry-list"></div>
+            </details>
+
+            <details class="collapsible">
+              <summary>外语能力<button type="button" class="secondary small inline-btn" id="add-language">+ 添加</button></summary>
+              <div id="languages-list" class="entry-list"></div>
+            </details>
+
+            <details class="collapsible">
+              <summary>计算机技能<button type="button" class="secondary small inline-btn" id="add-skill">+ 添加</button></summary>
+              <div id="skills-list" class="entry-list"></div>
+            </details>
+
+            <details class="collapsible">
+              <summary>资格证书<button type="button" class="secondary small inline-btn" id="add-certificate">+ 添加</button></summary>
+              <div id="certificates-list" class="entry-list"></div>
+            </details>
+
+            <details class="collapsible">
+              <summary>家庭情况<button type="button" class="secondary small inline-btn" id="add-family">+ 添加</button></summary>
+              <div id="family-list" class="entry-list"></div>
+            </details>
+
+            <details class="collapsible" open>
+              <summary>其他</summary>
+              <label>自我评价<textarea name="special.selfIntroduction" rows="5"></textarea></label>
+              <label>兴趣爱好<input name="special.hobbies"></label>
+            </details>
+
+            <div class="actions">
+              <button type="submit" class="primary">保存当前版本</button>
+              <span id="status"></span>
+            </div>
+          </section>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <dialog id="merge-dialog" class="merge-dialog">
+    <div class="merge-dialog-inner">
+      <h3>确认合并到表单</h3>
+      <p id="merge-summary" class="merge-summary"></p>
+      <div id="merge-detail" class="merge-detail"></div>
+      <p class="merge-hint">默认仅补充空白字段；勾选「覆盖已有内容」可全量替换。</p>
+      <div class="dialog-actions">
+        <button type="button" id="merge-cancel" class="secondary">取消</button>
+        <button type="button" id="merge-confirm" class="primary">确认填入</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="../lib/text-utils.js"></script>
+  <script src="../lib/resume-storage.js"></script>
+  <script src="../lib/resume-parser.js"></script>
+  <script src="resume.js"></script>
+</body>
+</html>

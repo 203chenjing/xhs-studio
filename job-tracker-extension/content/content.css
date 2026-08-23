@@ -1,0 +1,37 @@
+.jt-onboarding-tip {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2147483645;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: #111827;
+  color: #f9fafb;
+  font: 13px/1.4 -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  max-width: 90vw;
+}
+
+.jt-onboarding-tip span {
+  flex: 1;
+}
+
+.jt-tip-dismiss {
+  flex-shrink: 0;
+  padding: 4px 10px;
+  border: none;
+  border-radius: 6px;
+  background: #2563eb;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.jt-tip-dismiss:hover {
+  background: #1d4ed8;
+}

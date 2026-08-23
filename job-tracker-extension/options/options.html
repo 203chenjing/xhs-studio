@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>校招投递记录 · 设置</title>
+  <link rel="stylesheet" href="../lib/ui-common.css">
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <main class="wrap">
+    <header class="page-head">
+      <h1>设置</h1>
+      <p class="desc">配好 API Key 后，网申页会自动智能填表。投递记录始终自动保存，不耗 AI。</p>
+    </header>
+
+    <div id="onboarding-banner" class="onboarding-banner" hidden>
+      <strong>两步上手</strong>
+      <p>1. 填 API Key 并保存 → 2. 网申页点「开始填表」或等自动填充</p>
+      <a href="#" id="open-resume-from-settings">打开简历编辑器 →</a>
+    </div>
+
+    <form id="settings-form">
+      <section class="settings-section">
+        <h2 class="section-label">API Key</h2>
+        <p class="section-desc">用于智能填表、简历解析。不配置也能用手动填表和自动记台账。</p>
+
+        <label>API Key
+          <input type="password" id="api-key" placeholder="sk-..." autocomplete="off">
+          <span class="hint" id="key-hint">填写后务必点击「保存设置」</span>
+        </label>
+
+        <label>API Base URL
+          <input type="url" id="base-url" placeholder="https://api.deepseek.com/v1">
+        </label>
+
+        <label>模型
+          <input type="text" id="model" placeholder="deepseek-chat">
+        </label>
+
+        <div class="inline-actions">
+          <button type="submit" class="btn primary">保存设置</button>
+          <button type="button" id="test-ai" class="btn">测试连接</button>
+        </div>
+        <p id="status" class="status" hidden></p>
+      </section>
+
+      <section class="settings-section">
+        <h2 class="section-label">填表</h2>
+
+        <label class="row-check">
+          <input type="checkbox" id="ai-smart-autofill" checked>
+          <span>智能填表（推荐）：进页自动填 + AI 匹配 + 下拉/日期补填</span>
+        </label>
+
+        <label class="row-check">
+          <input type="checkbox" id="ai-resume-parse" checked>
+          <span>简历粘贴时用 AI 解析</span>
+        </label>
+      </section>
+
+      <details class="fold-advanced">
+        <summary>高级选项</summary>
+        <div class="fold-inner">
+          <label class="row-check">
+            <input type="checkbox" id="ai-enabled">
+            <span>补充页「AI 识别当前页」</span>
+          </label>
+          <label class="row-check">
+            <input type="checkbox" id="ai-auto-enhance">
+            <span>自动后台补全（保存记录时缺字段才调 AI）</span>
+          </label>
+          <label>简历解析模式
+            <select id="resume-parse-mode">
+              <option value="ai-first">AI 优先</option>
+              <option value="ai-only">仅 AI</option>
+              <option value="local-only">仅本地</option>
+            </select>
+          </label>
+          <label>调用模式
+            <select id="ai-mode">
+              <option value="fallback">补全模式</option>
+              <option value="always">增强模式</option>
+            </select>
+          </label>
+        </div>
+      </details>
+    </form>
+
+    <section class="tips">
+      <h2>你怎么用</h2>
+      <ul>
+        <li><strong>日常</strong>：正常投递，插件自动记台账</li>
+        <li><strong>填表</strong>：打开网申页 → 侧边栏自动填 → 点「填完了」</li>
+        <li><strong>改信息</strong>：侧边栏点「简历」编辑保存</li>
+      </ul>
+    </section>
+  </main>
+  <script src="../lib/constants.js"></script>
+  <script src="../lib/settings.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>

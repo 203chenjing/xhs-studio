@@ -1,0 +1,33 @@
+/* 校招投递助手 · 共享设计令牌 */
+:root {
+  --jt-primary: #2563eb;
+  --jt-primary-hover: #1d4ed8;
+  --jt-primary-light: #eff6ff;
+  --jt-primary-border: #bfdbfe;
+  --jt-success: #16a34a;
+  --jt-success-bg: #ecfdf5;
+  --jt-success-text: #047857;
+  --jt-warning: #b45309;
+  --jt-warning-bg: #fef3c7;
+  --jt-danger: #dc2626;
+  --jt-text: #111827;
+  --jt-text-secondary: #4b5563;
+  --jt-text-muted: #6b7280;
+  --jt-text-subtle: #9ca3af;
+  --jt-border: #e5e7eb;
+  --jt-border-light: #f3f4f6;
+  --jt-bg: #f8fafc;
+  --jt-card-bg: #fff;
+  --jt-radius: 12px;
+  --jt-radius-sm: 8px;
+  --jt-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --jt-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --jt-space-xs: 4px;
+  --jt-space-sm: 8px;
+  --jt-space-md: 12px;
+  --jt-space-lg: 16px;
+  --jt-space-xl: 24px;
+  --jt-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif;
+  --jt-font-size: 14px;
+  --jt-line: 1.5;
+}

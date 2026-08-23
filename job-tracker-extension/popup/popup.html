@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>校招投递助手</title>
+  <link rel="stylesheet" href="../lib/ui-common.css">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-main">
+      <h1>校招投递助手</h1>
+      <p class="header-sub">投递自动记 · 网申一键填</p>
+    </div>
+    <div class="header-right">
+      <span class="pending-badge" id="pending-badge" hidden></span>
+      <span class="count" id="count" title="已记录条数">0</span>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button type="button" class="tab" data-tab="apply" role="tab">填表</button>
+    <button type="button" class="tab active" data-tab="records" role="tab">记录</button>
+  </nav>
+
+  <!-- 填表：一条主路径 -->
+  <section class="panel" id="panel-apply" role="tabpanel">
+    <div class="hero-card">
+      <p class="hero-lead">在网申页点下面按钮，侧边栏会自动打开并填充表单。</p>
+      <button type="button" id="start-apply" class="btn-hero">
+        <span class="btn-hero-text">开始填表</span>
+        <span class="action-card-spinner" id="start-apply-spinner" hidden></span>
+      </button>
+      <p class="hero-meta" id="fill-session-status">当前简历 · —</p>
+    </div>
+
+    <div class="mini-toolbar">
+      <label class="mini-field">
+        <span class="mini-label">简历版本</span>
+        <select id="resume-version"></select>
+      </label>
+      <div class="mini-links">
+        <a href="#" id="open-resume">编辑简历</a>
+        <span class="quick-sep">·</span>
+        <a href="#" id="open-settings">设置</a>
+      </div>
+    </div>
+
+    <details class="fold-more">
+      <summary>更多操作</summary>
+      <div class="fold-more-body">
+        <button type="button" id="mark-filled" class="btn subtle block">标记「已填表」</button>
+        <button type="button" id="ai-suggest-resume" class="btn subtle block">AI 推荐简历版本</button>
+        <p id="suggest-result" class="suggest-result" hidden></p>
+      </div>
+    </details>
+  </section>
+
+  <!-- 记录 -->
+  <section class="panel active" id="panel-records" role="tabpanel">
+    <div class="status-card compact">
+      <strong>后台自动记台账</strong>
+      <p class="status-card-hint">投递成功、测评页会自动记录，一般不用手动操作。</p>
+    </div>
+
+    <div id="pending-section" class="pending-block" hidden>
+      <div class="section-head">
+        <h3 class="section-title">待确认 <span id="pending-count" class="section-count"></span></h3>
+      </div>
+      <ul id="pending-list" class="record-list record-list-pending"></ul>
+    </div>
+
+    <div class="records-toolbar">
+      <select id="filter-version" class="filter-select" title="按简历版本筛选">
+        <option value="">全部版本</option>
+      </select>
+      <input type="search" id="search" placeholder="搜索公司、岗位…" aria-label="搜索记录">
+    </div>
+    <p id="version-stats" class="version-stats" hidden></p>
+
+    <h3 class="section-title">最近记录</h3>
+    <ul id="record-list" class="record-list"></ul>
+    <p id="empty" class="empty-state" hidden>
+      <span>还没有记录</span>
+      <small>投递成功后会自动出现在这里</small>
+    </p>
+
+    <details class="fold-more">
+      <summary>手动补录 / 导入导出</summary>
+      <div class="fold-more-body">
+        <form id="record-form" class="supplement-form compact-form">
+          <label>公司<input id="company" name="company" placeholder="公司名"></label>
+          <label>岗位<input id="position" name="position" placeholder="岗位名"></label>
+          <label>状态<select id="status" name="status"></select></label>
+          <label>投递日期<input id="applyDate" name="applyDate" type="date"></label>
+          <label>备注<input id="note" name="note" placeholder="可选"></label>
+          <div class="form-actions">
+            <button type="button" id="fill-page" class="btn primary">读取当前页</button>
+            <button type="submit" class="btn btn-save">保存</button>
+            <button type="button" id="ai-fill" class="btn btn-ai-optional">AI 识别当前页</button>
+          </div>
+        </form>
+        <div class="panel-footer">
+          <button type="button" id="export-tsv" class="btn btn-footer">导出</button>
+          <label class="btn btn-footer file-btn">
+            导入
+            <input type="file" id="import-tsv" accept=".tsv,.txt,.csv" hidden>
+          </label>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <script src="../lib/constants.js"></script>
+  <script src="../lib/export.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
