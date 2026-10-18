@@ -53,6 +53,7 @@ CI 见 `.github/workflows/ci.yml`：`backend-tests` + `visual-regression`（wind
 - 附带 `demo/qr.html`「扫码在手机上看」页：二维码浏览器内生成，可改成线上地址，支持下载 640×640 PNG
 - 无后端、无构建步骤；资源全部相对路径
 - 制作方法与复用清单见 [`docs/DEMO-METHOD.md`](./docs/DEMO-METHOD.md)
+- 托管到 WorkBuddy / 任一静态站点：见 [`docs/WORKBUDDY-DEPLOY.md`](./docs/WORKBUDDY-DEPLOY.md)（含可直接粘贴的任务说明与验收清单）
 - 重新生成：`python tools/build_demo.py`（详见 [demo/README.md](./demo/README.md)）
 
 本地预览：`cd demo; python -m http.server 8810` → http://127.0.0.1:8810/

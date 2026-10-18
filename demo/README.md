@@ -33,6 +33,9 @@ demo/
 - 确保 `.woff2` 以 `font/woff2` 返回；多数静态托管会自动识别，若控制台报字体 MIME，请在托管配置里补上
 - 不需要 Node、Python 或任何构建步骤
 
+完整的托管任务书（要求、验收、回传信息、常见问题、可直接粘贴的指令）见
+[`docs/WORKBUDDY-DEPLOY.md`](../docs/WORKBUDDY-DEPLOY.md)。
+
 ## 本地预览
 
 ```powershell
