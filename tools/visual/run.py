@@ -163,6 +163,19 @@ def main() -> int:
                 page.click("#btn-confirm-layout")
                 page.wait_for_timeout(800)
 
+            # 显式加载画布字体，避免 fallback 字形进入基线
+            page.evaluate(
+                """async () => {
+                  await Promise.all([
+                    document.fonts.load('700 100px "XHS Serif"'),
+                    document.fonts.load('400 30px "XHS Sans"'),
+                    document.fonts.load('700 30px "XHS Sans"')
+                  ]);
+                  await document.fonts.ready;
+                }"""
+            )
+            page.wait_for_timeout(300)
+
             page.set_viewport_size(CANVAS_VIEWPORT)
             page.wait_for_timeout(400)
             # 隐藏壳层，只留画布，避免工具栏/页脚叠进截图

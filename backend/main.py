@@ -12,6 +12,7 @@ from __future__ import annotations
 import os
 import re
 import shutil
+import mimetypes
 import time
 import uuid
 from pathlib import Path
@@ -29,6 +30,10 @@ ROOT_DIR = BACKEND_DIR.parent
 FRONTEND_DIR = ROOT_DIR / "frontend"
 UPLOAD_DIR = BACKEND_DIR / "uploads"
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+
+# Windows 注册表经常缺 .woff2 映射，显式声明字体 MIME（Strict MIME 浏览器需要）
+mimetypes.add_type("font/woff2", ".woff2")
+mimetypes.add_type("font/woff", ".woff")
 
 load_dotenv(BACKEND_DIR / ".env")
 
