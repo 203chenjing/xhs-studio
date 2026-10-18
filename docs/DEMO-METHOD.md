@@ -4,6 +4,23 @@
 
 ---
 
+## 0. 一页执行版（TL;DR）
+
+| 阶段 | 做什么 | 产出 | 参考耗时 |
+|------|--------|------|----------|
+| 1 | 真跑一次完整流程，保存输出 JSON | `deck` 数据 | 0.5h |
+| 2 | 复用渲染器 + 写手机三屏壳 | `index.html` | 6–8h |
+| 3 | 写 PC 三栏工作台 | `pc.html` | 4–6h |
+| 4 | 浏览器内导出 + 扫码页 | ZIP / QR | 2–3h |
+| 5 | 构建脚本 + 多端验收 | 可维护的 `demo/` | 2–3h |
+
+**最短路径**：先做「一屏能滑动的成品」→ 再补审核与导出 → 最后做 PC 与扫码。
+**不要**先做登录、账号、真后端；这些和「让人看懂产品」无关。
+
+交付物固定为：`demo/` 静态目录 + 3 个 URL（手机 / PC / 扫码）+ 一份构建脚本。
+
+---
+
 ## 1. 目标与约束
 
 | 约束 | 结论 |
@@ -201,3 +218,138 @@ window.XHS_DEMO = {
 **不适合**：需要用户自由输入并实时看到不同结果、需要账号/协作/数据闭环的深度试用。
 
 折中方案：Demo 里保留“输入框”作为叙事的一部分，但明确说明是预生成案例；真正开放输入放到产品环境。
+
+---
+
+## 附录 A · 目录模板
+
+```
+<repo>/
+  tools/
+    build_demo.py            # 唯一构建入口
+    demo/
+      data/*.json            # 真实输出，按案例一份
+      vendor/*.js            # 只有 Demo 用的第三方库
+  demo/                      # 发布目录（站点根）
+    index.html               # 手机版
+    pc.html                  # PC 版（可选）
+    qr.html                  # 扫码页（可选）
+    deck.js                  # 生成物：数据
+    assets/
+      page.css / engine.js / themes.js
+      fonts.css + fonts/
+      vendor/
+```
+
+原则：`demo/` 里**只有生成物和手写壳**；原始数据与源资源放 `tools/`，避免“改 Demo 等于改产品”。
+
+---
+
+## 附录 B · `build_demo.py` 最小骨架
+
+```python
+ROOT = Path(__file__).resolve().parents[1]
+DEMO = ROOT / "demo"
+ASSETS = DEMO / "assets"
+DATA = ROOT / "tools" / "demo" / "data"
+
+def polish(raw, ov):
+    data = raw["data"]
+    data["meta"] = {**data.get("meta", {}), **ov["meta"]}
+    for p in data["pages"]:
+        if p.get("type") == "ending":
+            p["tags"] = ov["endingTags"]
+    # 只改展示字段，不动事实
+    return {"id": ov["id"], "intent": ov["intent"], "title": raw["title"],
+            "hooks": raw["hooks"], "caption": raw["caption"], "data": data}
+
+# 1) 数据 -> deck.js
+decks = [polish(json.loads((DATA / f"{k}.json").read_text()), v) for k, v in OVERRIDES.items()]
+(DEMO / "deck.js").write_text("window.XHS_DEMO = " + json.dumps({"decks": decks}, ensure_ascii=False))
+
+# 2) 同步渲染层
+for src, dst in COPIES:          # page.css / engine.js / themes.js / fonts / vendor
+    shutil.copyfile(ROOT / src, DEMO / dst)
+
+# 3) 修正字体路径：/static/fonts/ -> fonts/
+css = (ROOT / "frontend/css/fonts.css").read_text()
+(ASSETS / "fonts.css").write_text(css.replace("/static/fonts/", "fonts/"))
+```
+
+完整实现见 [`tools/build_demo.py`](../tools/build_demo.py)。
+
+---
+
+## 附录 C · 壳层状态机
+
+```
+状态：deck / theme / page / step / started / generating / exporting
+事件：选案例 / 生成 / 下一步 / 翻页 / 换主题 / 导出
+
+render():
+  sidebar  ← deck + review + publishTitle
+  canvas   ← pages[page] 经 renderPage()
+  rail     ← thumbs + themes + export 可用性
+```
+
+三条纪律：
+
+1. **单一数据源**：`deck.js` 是唯一内容来源，壳层不硬编码文案。
+2. **render 幂等**：任何状态变化都整体重渲染当前页，不做局部 DOM 拼接。
+3. **渲染与壳分离**：壳层不覆盖 `.xhs-page` 内部样式，主题只通过 CSS 变量切换。
+
+---
+
+## 附录 D · 验收脚本（最小版）
+
+```python
+with sync_playwright() as p:
+    page = p.chromium.launch().new_page(viewport={"width": 1440, "height": 900})
+    page.goto(base + "/pc.html"); page.wait_for_timeout(600)
+    assert page.is_visible("#stage-empty")
+
+    page.click("#primary"); page.wait_for_timeout(2400)      # 回放
+    assert page.is_visible("#review-block")
+    page.click("#primary"); page.wait_for_timeout(600)      # 进入排版
+
+    page.click("#next")
+    assert page.inner_text("#page-count").startswith("02")
+    page.click("[data-theme='terminal']")
+    assert "TERMINAL" in page.inner_text("#style-name")
+
+    with page.expect_download() as dl:
+        page.click("#export")
+        page.wait_for_selector("#export-actions:not([hidden])", timeout=120000)
+        page.click("#download")
+    assert dl.value.suggested_filename.endswith(".zip")
+```
+
+再加三组断言：`document.scrollWidth === innerWidth`（360/390）、字体 `document.fonts.check()`、二维码图片能被解码。
+
+---
+
+## 附录 E · 工作量与变体
+
+| 变体 | 复用方式 | 额外工作 |
+|------|----------|----------|
+| SaaS 后台 / 工作台 | 冻结一条操作流 + 真实图表组件 | 状态与表格数据要可重放 |
+| 开发者工具 / CLI | 录真实终端输出，做逐行回放 | 录制脚本、节奏控制 |
+| 移动 App | 静态截图 + 原生式转场（或 WebView） | 手势/转场细节 |
+| 内容站 / 作品集 | 直接静态渲染，无需“回放” | 排版与 SEO |
+
+参考工期：**一个终端 1–1.5 天**；每多一个终端（手机/PC/扫码）+0.5 天；有真实导出链路 +0.5 天。
+
+---
+
+## 附录 F · 交接清单
+
+给托管方 / 同事的最小信息包：
+
+- [ ] 仓库 + 分支 + 目录（或 zip）
+- [ ] 站点根要求（`index.html` 在根）
+- [ ] 3 个入口地址（手机 / PC / 扫码）
+- [ ] MIME 要求（`font/woff2`）
+- [ ] 验收结果（截图 + 导出 ZIP 尺寸）
+- [ ] 重新生成命令（`python tools/build_demo.py`）
+- [ ] 方法论文档（本文）与部署任务书（[`WORKBUDDY-DEPLOY.md`](./WORKBUDDY-DEPLOY.md)）
+
