@@ -49,8 +49,10 @@ CI 见 `.github/workflows/ci.yml`：`backend-tests` + `visual-regression`（wind
 
 - 完整走「输入 → 审核 → 排版 → 导出 ZIP」，导出在浏览器内完成（2160×2880 PNG + 文案）
 - 内容来自真实模型输出（秋招清单 / 带团队复盘两份），页面复用本仓库渲染引擎与 7 套主题
+- 入口：`demo/index.html` 手机版；`demo/pc.html` 桌面版工作台（三栏、缩略图、7 主题、导出）
 - 附带 `demo/qr.html`「扫码在手机上看」页：二维码浏览器内生成，可改成线上地址，支持下载 640×640 PNG
-- 无后端、无构建步骤；入口是 `demo/index.html`，资源全部相对路径
+- 无后端、无构建步骤；资源全部相对路径
+- 制作方法与复用清单见 [`docs/DEMO-METHOD.md`](./docs/DEMO-METHOD.md)
 - 重新生成：`python tools/build_demo.py`（详见 [demo/README.md](./demo/README.md)）
 
 本地预览：`cd demo; python -m http.server 8810` → http://127.0.0.1:8810/

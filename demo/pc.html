@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#08090c">
+  <title>小红书一键成图 · 桌面版 Demo</title>
+  <meta name="description" content="xhs-studio 桌面工作台 Demo：左侧写稿审核，中间 3:4 画布，右侧页面与 7 套主题，浏览器内导出发布包。">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23f0405a'/%3E%3Ctext x='16' y='22' font-size='17' font-family='sans-serif' font-weight='700' text-anchor='middle' fill='%23fff'%3E%E5%B0%8F%3C/text%3E%3C/svg%3E">
+  <link rel="preload" href="assets/fonts/xhs-sans-regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/xhs-sans-bold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/xhs-serif-bold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/fonts.css">
+  <link rel="stylesheet" href="assets/page.css">
+  <link rel="stylesheet" href="pc.css">
+</head>
+<body>
+  <header class="pc-top">
+    <div class="pc-brand">
+      <span class="pc-mark" aria-hidden="true">小</span>
+      <div class="pc-brand-text">
+        <b>小红书一键成图</b>
+        <span>桌面工作台 · Demo</span>
+      </div>
+    </div>
+
+    <nav class="pc-steps" id="steps" aria-label="流程步骤">
+      <button type="button" data-step="1" class="is-active"><i>1</i><span>输入</span></button>
+      <button type="button" data-step="2" disabled><i>2</i><span>审核</span></button>
+      <button type="button" data-step="3" disabled><i>3</i><span>排版</span></button>
+    </nav>
+
+    <div class="pc-top-actions">
+      <label class="pc-select">
+        <span>案例</span>
+        <select id="sample"></select>
+      </label>
+      <a href="index.html">手机版</a>
+      <a href="qr.html">扫码</a>
+      <a href="https://github.com/203chenjing/xhs-studio" target="_blank" rel="noreferrer">GitHub ↗</a>
+    </div>
+  </header>
+
+  <main class="pc-main">
+    <aside class="pc-side">
+      <div class="side-scroll">
+        <section class="block">
+          <div class="block-head"><span>当前案例</span><em id="deck-kicker"></em></div>
+          <div class="deck-list" id="decks"></div>
+        </section>
+
+        <section class="block">
+          <div class="block-head"><span>本次意图</span><em class="mono">1 次生成</em></div>
+          <p class="intent" id="intent"></p>
+        </section>
+
+        <section class="block review-block" id="review-block" hidden>
+          <div class="block-head">
+            <span>发布检查</span>
+            <em class="risk" id="risk">可以发</em>
+          </div>
+          <div class="field">
+            <div class="field-head"><span>标题</span><button type="button" data-copy="title">复制</button></div>
+            <p class="pub-title" id="pub-title"></p>
+            <div class="hooks" id="hooks"></div>
+          </div>
+          <div class="field">
+            <div class="field-head"><span>正文 + 话题</span><button type="button" data-copy="caption">复制</button></div>
+            <p class="caption" id="caption"></p>
+          </div>
+          <div class="checks">
+            <span>标题 <b id="check-title">—</b></span>
+            <span>页数 <b id="check-pages">—</b></span>
+            <span>话题 <b id="check-tags">—</b></span>
+          </div>
+        </section>
+      </div>
+
+      <div class="side-cta">
+        <button type="button" class="cta" id="primary">生成并审核</button>
+        <p class="cta-hint" id="cta-hint">回放约 2 秒 · 内容为真实模型预生成</p>
+      </div>
+    </aside>
+
+    <section class="pc-stage" id="stage">
+      <div class="stage-toolbar">
+        <div class="toolbar-meta">
+          <span class="badge" id="page-type">未生成</span>
+          <span class="mono" id="page-count">—</span>
+        </div>
+        <div class="toolbar-actions">
+          <button type="button" id="prev" disabled aria-label="上一页">←</button>
+          <button type="button" id="next" disabled aria-label="下一页">→</button>
+          <span class="mono" id="zoom">—</span>
+        </div>
+      </div>
+
+      <div class="stage-body" id="stage-body">
+        <div class="stage-empty" id="stage-empty">
+          <div class="empty-card">
+            <span class="mono">xhs-studio / 1080×1440</span>
+            <h2>先写意图，再一次成稿</h2>
+            <p>左侧选一个真实案例，点「生成并审核」。中间是产品同款 3:4 画布，右侧可翻页、换主题。</p>
+            <div class="empty-steps">
+              <span><i>1</i>写稿</span>
+              <span><i>2</i>审核</span>
+              <span><i>3</i>排版导出</span>
+            </div>
+          </div>
+        </div>
+        <div class="canvas-box" id="canvas-box" hidden>
+          <div class="canvas" id="canvas"></div>
+        </div>
+        <div class="gen" id="gen" hidden>
+          <div class="gen-card">
+            <div class="gen-skel" aria-hidden="true"><span class="sk t"></span><span class="sk"></span><span class="sk short"></span></div>
+            <p class="gen-stage" id="gen-stage">① 正在写稿…</p>
+            <div class="gen-bar"><span id="gen-bar"></span></div>
+            <p class="gen-note" id="gen-note">组页 → 审核 → 排版，回放约 2 秒</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="stage-foot">
+        <span id="stage-note">生成后可逐页查看、切换主题并导出</span>
+        <span class="mono" id="style-name">简约 INS</span>
+      </div>
+    </section>
+
+    <aside class="pc-rail">
+      <div class="rail-head"><span>页面</span><em class="mono" id="rail-count">—</em></div>
+      <div class="thumbs" id="thumbs">
+        <p class="rail-empty">生成后显示页面缩略图</p>
+      </div>
+
+      <div class="rail-head"><span>风格</span><em class="mono" id="rail-theme">简约 INS</em></div>
+      <div class="theme-list" id="themes"></div>
+
+      <div class="rail-foot">
+        <button type="button" class="export-btn" id="export" disabled>导出发布包</button>
+        <p class="rail-note">2160×2880 PNG + title / caption</p>
+      </div>
+    </aside>
+  </main>
+
+  <div class="pc-modal" id="export-modal" hidden>
+    <div class="pc-sheet" role="dialog" aria-modal="true" aria-labelledby="export-title">
+      <h3 id="export-title">正在导出发布包</h3>
+      <p class="sheet-sub" id="export-sub">逐页渲染 2160×2880 PNG…</p>
+      <div class="bar"><span id="export-bar"></span></div>
+      <p class="mono sheet-status" id="export-status">0 / 0</p>
+      <div class="sheet-actions" id="export-actions" hidden>
+        <a class="cta" id="download" download>下载 ZIP</a>
+        <button type="button" class="ghost" id="export-close">完成</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pc-toast" id="toast" role="status" aria-live="polite" hidden></div>
+  <div class="pc-mobile">
+    <div class="pc-mobile-card">
+      <p class="mono">DESKTOP DEMO</p>
+      <h1>桌面版演示需要更宽的屏幕</h1>
+      <p>当前窗口较窄，建议用电脑打开；手机上可以直接走完整流程。</p>
+      <a class="cta" href="index.html">打开手机版 Demo</a>
+    </div>
+  </div>
+  <div id="export-stage" aria-hidden="true"></div>
+
+  <script src="deck.js"></script>
+  <script src="assets/themes.js"></script>
+  <script src="assets/engine.js"></script>
+  <script src="assets/vendor/html-to-image.min.js"></script>
+  <script src="assets/vendor/jszip.min.js"></script>
+  <script src="pc.js"></script>
+</body>
+</html>
