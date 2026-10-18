@@ -3,9 +3,9 @@ window.XHS_THEMES = {
     "id": "ins",
     "file": "xhs-ins.html",
     "title": "简约 INS",
-    "desc": "浅色留白 · 低饱和 · 细线",
-    "fonts": "<link href=\"https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Noto+Sans+SC:wght@300;400;500;700&display=swap\" rel=\"stylesheet\">",
-    "css": "--page-bg: #fafafa;\n  --page-fg: #2c2c2c;\n  --page-muted: #6b6b6b;\n  --page-accent: #6b7280;\n  --page-accent2: #d1d5db;\n  --page-border: #e5e7eb;\n  --page-card: #ffffff;\n  --page-kicker: #9ca3af;\n  --page-tag-bg: #f3f4f6;\n  --page-tag-fg: #6b7280;\n  --page-shadow: none;\n  --page-radius: 2px;\n  --page-border-w: 1px;\n  --page-font-title: \"ZCOOL XiaoWei\", \"Noto Sans SC\", serif;\n  --page-font-body: \"Noto Sans SC\", \"PingFang SC\", sans-serif;\n  --page-font-mono: \"Noto Sans SC\", monospace;\n  --page-cover-deco: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);\n  --page-chapter-bg: #ffffff;\n  --page-quote-border: #d1d5db;\n  --page-neg: #ef4444;\n  --page-pos: #22c55e;\n  --page-neutral: #6b7280;\n  --ui-bg: #ffffff;\n  --ui-fg: #1f2937;\n  --ui-border: #e5e7eb;\n  --ui-accent: #6b7280;"
+    "desc": "暖白纸感 · 朱红点缀 · 衬线标题",
+    "fonts": "<link href=\"https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap\" rel=\"stylesheet\">",
+    "css": "--page-bg: #f8f4ec;\n  --page-paper-texture: 0.05;\n  --page-fg: #1d1a16;\n  --page-muted: #6c6459;\n  --page-accent: #e24b3f;\n  --page-accent2: #f0a35e;\n  --page-border: #e7ddce;\n  --page-card: #fffdf9;\n  --page-kicker: #b4562f;\n  --page-tag-bg: #fbedE7;\n  --page-tag-fg: #b4472f;\n  --page-shadow: 0 10px 26px rgba(58,44,30,0.055), 0 1px 3px rgba(58,44,30,0.04);\n  --page-radius: 10px;\n  --page-border-w: 1px;\n  --page-font-title: \"Noto Serif SC\", \"Songti SC\", serif;\n  --page-font-body: \"Noto Sans SC\", \"PingFang SC\", sans-serif;\n  --page-font-mono: \"DM Sans\", \"Noto Sans SC\", monospace;\n  --page-cover-deco: radial-gradient(ellipse 90% 70% at 100% 0%, rgba(226,75,63,0.10), transparent 62%), radial-gradient(ellipse 70% 55% at 0% 100%, rgba(240,163,94,0.16), transparent 60%), linear-gradient(165deg, #fbf7f0 0%, #f3ebdf 100%);\n  --page-chapter-bg: #fbf7f0;\n  --page-quote-border: #e24b3f;\n  --page-neg: #d94a3d;\n  --page-pos: #3f8f6b;\n  --page-neutral: #6c6459;\n  --ui-bg: #f8f4ec;\n  --ui-fg: #1d1a16;\n  --ui-border: #e7ddce;\n  --ui-accent: #e24b3f;"
   },
   "literary": {
     "id": "literary",

@@ -6,7 +6,16 @@ import re
 from typing import Any
 
 
+_TOPIC_BREAK = re.compile(r"[：:，,。；;！!？?、\n|｜]")
+_TOPIC_MAX = 16
+
+
 def _topic_from_intent(intent: str) -> str:
+    """从意图里提炼一个能上封面的短主题。
+
+    封面标题字号是 90–110px，整段意图直接当标题会撑成 5–6 行并顶到页脚。
+    这里只取第一个分句，并限制在 16 字内，保证 Demo 出图也符合 3:4 排版。
+    """
     s = (intent or "").strip()
     if not s:
         return "小红书干货笔记"
@@ -15,7 +24,12 @@ def _topic_from_intent(intent: str) -> str:
         "",
         s,
     ).strip(" ：:，,")
-    return s[:40] if s else "小红书干货笔记"
+    head = _TOPIC_BREAK.split(s, maxsplit=1)[0].strip(" 　")
+    if len(head) < 2:
+        head = s
+    if len(head) > _TOPIC_MAX:
+        head = head[:_TOPIC_MAX].rstrip("的了和与及或吗呢啊")
+    return head.strip() or "小红书干货笔记"
 
 
 def _detect_category(intent: str) -> str:

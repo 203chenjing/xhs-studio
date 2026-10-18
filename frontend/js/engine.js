@@ -345,7 +345,7 @@
         .map(
           (it, i) =>
             `<li><span class="ledger-idx" aria-hidden="true">${ledgerIndex(i)}</span><div class="ledger-main"><div class="pt-head">${esc(
-              it.head || ""
+              stripHeadIndex(it.head || "")
             )}</div><div class="pt-body">${nl2br(it.body || "")}</div></div></li>`
         )
         .join("")}</ul>`;
@@ -356,7 +356,7 @@
       .map((it, i) => {
         const tag = it && it.tag ? `<span class="pt-tag-pill">${esc(it.tag)}</span>` : "";
         const headPrefix = pillTags && !it.tag ? `<span class="pt-tag-pill">${ledgerIndex(i)}</span>` : tag;
-        return `<li><div class="pt-head">${headPrefix}${esc(it.head)}</div><div class="pt-body">${nl2br(it.body)}</div></li>`;
+        return `<li><div class="pt-head">${headPrefix}${esc(stripHeadIndex(it.head))}</div><div class="pt-body">${nl2br(it.body)}</div></li>`;
       })
       .join("")}</ul>`;
   }
@@ -425,7 +425,7 @@
     return `<div class="block-thumb">${imgTag(src, "block-thumb-img", focus)}</div>`;
   }
 
-  function renderCover(p, meta) {
+  function renderCover(p, meta, opts) {
     const variant = layoutVariantOf(p, "cover") || "default";
     const hasImg = !!p.image;
     const useSplit = variant === "hero-split" || (variant === "magazine" && hasImg);
@@ -440,7 +440,19 @@
       ? `<div class="cover-stat" aria-hidden="true">${esc(p.stat)}</div>`
       : "";
     const questionMark = variant === "question-hook" ? `<span class="cover-qmark" aria-hidden="true">?</span>` : "";
-    return `<div class="page-inner cover-page${cls}${variantCls}${splitCls}">${deco}<div class="page-content cover-content">${p.kicker ? `<div class="kicker">${esc(p.kicker)}</div>` : ""}${numberHtml}<h1 class="cover-title">${questionMark}${nl2br(p.title)}</h1>${p.subtitle ? `<p class="cover-sub">${nl2br(p.subtitle)}</p>` : ""}${renderTags(p.tags)}</div>${renderMeta(meta)}</div>`;
+    const idx = String(((opts && opts.pageIndex) || 0) + 1).padStart(2, "0");
+    const total = opts && opts.pageTotal ? opts.pageTotal : 0;
+    // 短标题放大字号，长标题先降一档；最终仍由 fitPage 兜底缩字号
+    const titleLen = String(p.title || "").replace(/\s+/g, "").length;
+    const lenCls =
+      titleLen <= 8 ? " cover-title-xl" : titleLen <= 14 ? " cover-title-lg" : titleLen > 30 ? " cover-title-sm" : "";
+    const cue = hasImg
+      ? ""
+      : `<div class="cover-cue" aria-hidden="true"><span class="cover-cue-rule"></span><span class="cover-cue-text">${total ? `共 ${String(total).padStart(2, "0")} 页 · ` : ""}左滑查看</span></div>`;
+    const aside = hasImg
+      ? ""
+      : `<div class="cover-aside" aria-hidden="true"><span class="cover-aside-no">${idx}</span><span class="cover-aside-line"></span><span class="cover-aside-label">XHS NOTES</span></div>`;
+    return `<div class="page-inner cover-page${cls}${variantCls}${splitCls}">${deco}${aside}<div class="page-content cover-content">${p.kicker ? `<div class="kicker">${esc(p.kicker)}</div>` : ""}<div class="cover-main">${numberHtml}<h1 class="cover-title${lenCls}">${questionMark}${nl2br(p.title)}</h1>${p.subtitle ? `<p class="cover-sub">${nl2br(p.subtitle)}</p>` : ""}${renderTags(p.tags)}</div>${cue}</div>${renderMeta(meta)}</div>`;
   }
 
   function renderChapter(p, meta) {
@@ -465,7 +477,7 @@
       variant === "divider-heavy"
         ? `<div class="chapter-rule" aria-hidden="true"></div><div class="chapter-rule chapter-rule-thin" aria-hidden="true"></div>`
         : `<div class="chapter-rule" aria-hidden="true"></div>`;
-    return `<div class="page-inner chapter-page${variantCls}"><div class="page-content chapter-content">${progressBand}${roleLine}${rules}<div class="chapter-no">${noDisplay}</div><h2 class="chapter-title"${style}>${nl2br(p.title)}</h2>${p.desc ? `<p class="chapter-desc"${style}>${nl2br(p.desc)}</p>` : ""}</div>${renderMeta(meta)}</div>`;
+    return `<div class="page-inner chapter-page${variantCls}" data-chapter-no="${esc(noRaw)}"><div class="page-content chapter-content">${progressBand}${roleLine}${rules}<div class="chapter-no">${noDisplay}</div><h2 class="chapter-title"${style}>${nl2br(p.title)}</h2>${p.desc ? `<p class="chapter-desc"${style}>${nl2br(p.desc)}</p>` : ""}</div>${renderMeta(meta)}</div>`;
   }
 
   function renderPoints(p, meta) {
@@ -885,7 +897,7 @@
     const t = page.type || "card";
     switch (t) {
       case "cover":
-        html = renderCover(page, meta);
+        html = renderCover(page, meta, opts);
         if (editable) html = annotateEditable(html, page);
         return html;
       case "chapter":
@@ -955,6 +967,75 @@
     return content.scrollHeight > content.clientHeight + 2;
   }
 
+  const HEAD_INDEX_RE = /^\s*[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳]\s*/;
+
+  /** 序号已由卡片编号承担时，去掉文案里重复的 ①②③ */
+  function stripHeadIndex(text) {
+    return String(text == null ? "" : text).replace(HEAD_INDEX_RE, "");
+  }
+
+  const FIT_TITLE_SELECTOR = [
+    ".cover-title",
+    ".ending-title",
+    ".chapter-title",
+    ".block-title",
+    ".card-title",
+    ".quote-text",
+  ].join(",");
+
+  /**
+   * 页面级排版自适应（预览与导出共用，保证所见即所得）：
+   * 1) 字超出画布时逐级缩小标题，先保内容完整，再保字号；
+   * 2) 内容明显偏少时打 is-sparse，由 CSS 垂直居中，避免半页空白。
+   */
+  function fitPage(el) {
+    if (!el) return { overflow: false, sparse: false };
+    const content = el.querySelector(".page-content");
+    if (!content) return { overflow: false, sparse: false };
+    const titles = Array.prototype.slice.call(content.querySelectorAll(FIT_TITLE_SELECTOR));
+    titles.forEach((t) => {
+      t.style.removeProperty("font-size");
+      t.style.removeProperty("--fit-font-size");
+    });
+    let guard = 0;
+    while (content.scrollHeight > content.clientHeight + 2 && guard < 20) {
+      let shrunk = false;
+      titles.forEach((t) => {
+        const cur = parseFloat(t.style.fontSize) || parseFloat(getComputedStyle(t).fontSize);
+        if (cur > 34) {
+          t.style.fontSize = Math.max(34, cur - 4) + "px";
+          shrunk = true;
+        }
+      });
+      if (!shrunk) break;
+      guard += 1;
+    }
+    const overflow = content.scrollHeight > content.clientHeight + 2;
+    // 注意：scrollHeight 至少等于容器高度，不能用来判断「内容偏少」，
+    // 这里累加子元素的实际布局高度（不受预览 scale 影响）。
+    const gap = parseFloat(getComputedStyle(content).rowGap) || 0;
+    let used = 0;
+    let count = 0;
+    Array.prototype.forEach.call(content.children, (child) => {
+      if (getComputedStyle(child).position === "absolute") return;
+      used += child.offsetHeight;
+      count += 1;
+    });
+    if (count > 1) used += gap * (count - 1);
+    const sparse = !overflow && used > 0 && used < content.clientHeight * 0.72;
+    content.classList.toggle("is-sparse", sparse);
+    return { overflow, sparse };
+  }
+
+  /** 页面字体固定用系统字体：预览与 html-to-image 导出才能完全一致。 */
+  const SYSTEM_PAGE_FONTS = {
+    "--page-font-title":
+      '"Songti SC", "STSong", "Noto Serif CJK SC", "Source Han Serif SC", "SimSun", serif',
+    "--page-font-body":
+      '"PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC", sans-serif',
+    "--page-font-mono": 'ui-monospace, "Cascadia Code", Consolas, monospace',
+  };
+
   function applyTheme(themeId, themesMap) {
     const theme = themesMap[themeId] || themesMap.ins;
     if (!theme) return;
@@ -967,7 +1048,11 @@
       const val = pair.slice(idx + 1).trim();
       if (key.startsWith("--")) root.style.setProperty(key, val);
     });
-    // inject fonts if needed
+    Object.keys(SYSTEM_PAGE_FONTS).forEach((key) => {
+      root.style.setProperty(key, SYSTEM_PAGE_FONTS[key]);
+    });
+    // 页面不使用网络字体：避免 html-to-image 因 CORS 读不到 Google Fonts
+    // 的 cssRules 而静默回退，导致导出图与预览字形/换行不一致。
     const linkId = "xhs-theme-fonts";
     let link = document.getElementById(linkId);
     if (!link) {
@@ -975,7 +1060,7 @@
       link.id = linkId;
       document.head.appendChild(link);
     }
-    link.innerHTML = theme.fonts || "";
+    link.innerHTML = "";
   }
 
   /** Per-page density class + optional --page-font-scale inline style */
@@ -1023,6 +1108,8 @@
     pointsStyleOf,
     renderPointsItemsHtml,
     checkOverflow,
+    fitPage,
+    stripHeadIndex,
     applyTheme,
     normalizeCompare,
     pageShellAttrs,

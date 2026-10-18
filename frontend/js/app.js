@@ -72,6 +72,8 @@
   let currentEstimatedSeconds = 10;
   let ephemeralRenderTimer = null;
 
+  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
   const MAX_PHOTOS = 9;
 
   const $ = (s) => document.querySelector(s);
@@ -86,6 +88,7 @@
   const progressLabel = $("#progress-label");
   const progressMeta = $("#progress-meta");
   const preview = $("#preview-stage");
+  const panelScroll = $(".panel-scroll");
   const overflowBadge = $("#overflow-badge");
   const emptyHint = $("#empty-hint");
   const pageNav = $("#page-nav");
@@ -1067,8 +1070,8 @@
     });
     if (heroEtaHint) {
       heroEtaHint.textContent = llm
-        ? "主路径 2 次 LLM：①写稿 + ②审核；单页改/排版思路/复审另计，会话累计见顶部 pill"
-        : "Demo：非完整 AI · ①写稿/②审核约各 1 秒；单页规则改即时";
+        ? "主路径 2 次 LLM：①写稿 + ②审核；单页改 / 排版思路 / 复审另计，会话累计见顶部"
+        : "主路径 2 步：①写稿 + ②审核；单页规则改即时生效，不消耗调用";
     }
   }
 
@@ -2168,11 +2171,14 @@
     // 审时即可看图：有 data 就渲染；未确认排版 = 只读翻页，禁用高危编辑/导出
     if (!state.data || !state.data.pages || !state.data.pages.length) {
       preview.innerHTML = "";
+      preview.classList.add("is-empty");
       renderManuscript();
       if (!state.generating) {
         emptyHint.classList.remove("hidden");
         emptyHint.innerHTML =
-          "输入意图，点「生成并审核」<br>写意图 → 出稿审核 → 改页导出";
+          '<div class="empty-kicker">创作工作台 · 3:4 竖版</div>' +
+          '<div class="empty-title">把一段想法，变成能发的图文</div>' +
+          '<div class="empty-sub">写意图 → 出稿审核 → 改页导出<br>右侧实时预览，发布包导出 2×（2160 × 2880）PNG</div>';
       }
       btnExport.disabled = true;
       btnExport.classList.remove("ready");
@@ -2197,6 +2203,7 @@
 
     hideGenSkeleton();
     emptyHint.classList.add("hidden");
+    preview.classList.remove("is-empty");
     const readonly = !state.layoutConfirmed;
     updateCopilotContext(null);
     syncCopilot();
@@ -2286,6 +2293,7 @@
 
     requestAnimationFrame(() => {
       const pg = $("#current-page");
+      if (pg) XHSEngine.fitPage(pg);
       const overflow = !!(pg && XHSEngine.checkOverflow(pg));
       overflowBadge.classList.toggle("is-visible", overflow);
       syncOverflowActions(overflow);
@@ -2499,6 +2507,7 @@
           pageTotal: pages.length,
         });
         hidden.appendChild(div);
+        XHSEngine.fitPage(div);
 
         const imgs = Array.from(div.querySelectorAll("img"));
         await Promise.all(
@@ -2840,6 +2849,9 @@
       backfillPublishFields(result);
       pushHistory("生成");
       showReviewPanel();
+      // 意图区收起后侧栏高度变短，浏览器会保留旧 scrollTop，
+      // 导致用户落在「页面摘要」而不是审核结论上；这里显式回到顶部。
+      if (panelScroll) panelScroll.scrollTop = 0;
       renderThemeGrid();
       XHSEngine.applyTheme(state.style, window.XHS_THEMES);
       renderHooks();
@@ -2954,6 +2966,7 @@
     // 不得无条件清复审标记：审核阶段改过的 title/caption/hooks 要保留
     setFlowStep(3);
     showPostGen();
+    if (panelScroll) panelScroll.scrollTop = 0;
     syncStickyCta();
     if (!already) {
       renderPreview();
@@ -2977,9 +2990,13 @@
     if (!already && copilotPanel) {
       copilotPanel.classList.add("copilot-panel--unlock");
       window.setTimeout(() => copilotPanel.classList.remove("copilot-panel--unlock"), 2400);
-      requestAnimationFrame(() => {
-        copilotPanel.scrollIntoView({ block: "nearest", behavior: "smooth" });
-      });
+      // 只在用户主动确认/开始编辑时滚到改页助手；
+      // 自动解锁（pass / 翻完）时保持审核结论在视野里。
+      if (!auto || focusInput) {
+        requestAnimationFrame(() => {
+          copilotPanel.scrollIntoView({ block: "nearest", behavior: "smooth" });
+        });
+      }
     }
     return true;
   }
