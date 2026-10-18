@@ -109,6 +109,13 @@ SYSTEM_GENERATE = """你是小红书图文「编排导演」+ 资深博主。视
 - quote / summary / ending：有记忆点与 CTA
 - composite：blocks 2-4 个可混排模块（见下）
 
+## 标题长度（硬性，画布 1080×1440，宁短勿长）
+- cover.title ≤ 16 字，最多 2 行；放不下的信息放 subtitle
+- 非封面页 title ≤ 18 字（points/timeline/card/free/compare/summary）
+- chapter.title ≤ 12 字；ending.title ≤ 12 字
+- points[].head ≤ 12 字；timeline[].head ≤ 14 字
+- 超过上限时先改写，不要指望渲染层自动缩小字号
+
 ## 发布文案（与页内分开，必须输出）
 - title：主推标题，约 16–28 字，尽量单行
 - hooks：3–5 个标题候选

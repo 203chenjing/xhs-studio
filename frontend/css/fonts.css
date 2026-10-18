@@ -1,0 +1,24 @@
+/* 本地子集字体（GB2312 + ASCII + 常用标点，共约 3.7MB）。
+   预览、导出与 CI 视觉回归共用同一份字形，不依赖 Google Fonts。
+   由 tools/build_page_fonts.py 生成。 */
+@font-face {
+  font-family: "XHS Serif";
+  src: url("/static/fonts/xhs-serif-bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "XHS Sans";
+  src: url("/static/fonts/xhs-sans-regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "XHS Sans";
+  src: url("/static/fonts/xhs-sans-bold.woff2") format("woff2");
+  font-weight: 600 700;
+  font-style: normal;
+  font-display: swap;
+}

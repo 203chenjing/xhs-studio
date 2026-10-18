@@ -180,6 +180,31 @@ def build_demo_payload(
         title = f"{title}｜含实拍"
         hooks = [title] + [h for h in hooks[1:] if h != title]
 
+    if n_img and isinstance(data, dict) and data.get("pages"):
+        # Demo 也要用上用户上传的图：1 张做 photo 页，多张做 gallery 页
+        pages = data["pages"]
+        insert_at = next(
+            (i for i, page in enumerate(pages) if page.get("type") == "ending"),
+            len(pages),
+        )
+        if n_img == 1:
+            image_page = {
+                "type": "photo",
+                "title": "实拍配图",
+                "body": "拍下这一步，比大段描述更有说服力；图下只留一句补充。",
+                "image": image_urls[0],
+                "role": "配图",
+            }
+        else:
+            image_page = {
+                "type": "gallery",
+                "title": "实拍记录",
+                "caption": "同一组图，换顺序就是另一条叙事。",
+                "images": list(image_urls[:9]),
+                "role": "配图",
+            }
+        pages.insert(insert_at, image_page)
+
     theme = f"{topic}：把关键步骤讲清楚，并立刻能动手"
     # 粗大纲（validate 后会按 pages.role 再精炼）
     logic_summary = [

@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  backend-tests:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install backend deps
+        run: pip install -r requirements.txt
+        working-directory: backend
+      - name: Run unit tests
+        run: python -m pytest tests -q
+        working-directory: backend
+
+  visual-regression:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install deps
+        run: |
+          pip install -r backend/requirements.txt
+          pip install playwright==1.60.0 pillow
+      - name: Install Chromium
+        run: python -m playwright install chromium
+      - name: Compare canvas screenshots
+        run: python tools/visual/run.py
+      - name: Upload visual diffs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-diff
+          path: tools/visual/artifacts
+          retention-days: 7

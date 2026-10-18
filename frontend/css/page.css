@@ -3,6 +3,8 @@
        画布：1080×1440（3:4）；导出默认 2×=2160×2880
        边距：56 / 52 / 52（安全区不低于 48）；列表项等高撑满
        ══════════════════════════════════════ */
+
+/* 字体定义统一放在 fonts.css（index.html 首次加载） */
     .xhs-page {
       width: 1080px; height: 1440px; overflow: hidden;
       background: var(--page-bg); color: var(--page-fg);
@@ -1581,3 +1583,43 @@
     .cover-title.cover-title-xl { font-size: 136px; line-height: 1.02; letter-spacing: -0.04em; }
     .cover-title.cover-title-lg { font-size: 120px; line-height: 1.04; }
     .cover-title.cover-title-sm { font-size: 88px; line-height: 1.1; }
+
+    /* ══ 图片页：photo / gallery 与整套卡片同一套圆角、阴影、编号节奏 ══ */
+    .photo-hero,
+    .block-thumb,
+    .gallery-cell {
+      border: 1px solid color-mix(in srgb, var(--page-border) 65%, transparent);
+      border-radius: var(--page-card-radius);
+      box-shadow: var(--page-card-elev);
+      position: relative;
+      background: var(--page-card);
+    }
+    .photo-hero::after,
+    .gallery-cell::after {
+      content: "";
+      position: absolute; inset: 0;
+      border-radius: inherit;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+      pointer-events: none;
+    }
+    .photo-copy { display: flex; flex-direction: column; gap: 10px; }
+    .photo-copy .block-title { margin-bottom: 0; }
+    .photo-body { font-size: 29px; line-height: 1.55; color: var(--page-muted); }
+    .gallery-grid { gap: 14px; counter-reset: gcell; }
+    .gallery-cell { counter-increment: gcell; overflow: hidden; }
+    .gallery-cell::before {
+      content: counter(gcell, decimal-leading-zero);
+      position: absolute; left: 12px; top: 12px; z-index: 2;
+      min-width: 34px; padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(20, 18, 16, 0.55);
+      backdrop-filter: blur(6px);
+      color: #fff;
+      font-family: var(--page-font-mono);
+      font-size: 15px; font-weight: 700;
+      letter-spacing: 0.06em;
+      text-align: center;
+    }
+    /* 图片本身不要重复描边，圆角由容器裁切 */
+    .photo-hero-img, .gallery-img, .block-thumb-img { display: block; }
+    .photo-page .page-content { gap: 18px; }

@@ -27,10 +27,22 @@ Rule 管「不能破」；Skill 管「怎么做」。专业 prompt 放 `backend/
 
 本次重做了壳层与页面版式，并加入「标题自适应 + 稀疏页居中」：
 
-- 设计说明、诊断与验收见 [`DESIGN-REVIEW.md`](./DESIGN-REVIEW.md)。
+- 设计说明、诊断与验收见 [`DESIGN-REVIEW.md`](./DESIGN-REVIEW.md)；产品视角复盘见 [`PRODUCT-REVIEW.md`](./PRODUCT-REVIEW.md)。
 - 页面级自适应在 `frontend/js/engine.js` 的 `XHSEngine.fitPage()`；预览与导出共用同一套量测。
 - 默认主题 `ins` 改为暖白纸感 + 朱红强调 + 衬线标题；其余六套主题共用新的卡片/编号/引号规则。
+- 页面字体为本地子集（Source Han Serif/Sans → woff2），由 `tools/build_page_fonts.py` 生成。
 - 桌面 1512×950、移动 390×844 均已走通主路径；移动端不再被 1080px 画布撑出横向滚动。
+
+### 视觉回归
+
+```powershell
+python -m playwright install chromium
+python tools/visual/run.py          # 对比 tools/visual/baselines
+python tools/visual/run.py --update # 有意改版后重建基线
+```
+
+CI 见 `.github/workflows/ci.yml`：`backend-tests` + `visual-regression`（windows-latest）。
+
 
 
 ## 「2+1」调用架构
@@ -150,7 +162,7 @@ python main.py
 
 ## 已知限制
 
-- 页面画布固定使用**系统字体**（宋体 / 苹方 / 微软雅黑）；不依赖 Google Fonts，预览与导出字形一致
+- 页面画布使用**本地子集字体**（`frontend/fonts/*.woff2`，GB2312 + ASCII + 常用标点，约 3.7MB）；不依赖 Google Fonts，预览、导出与 CI 截图字形一致
 - 首次导出需联网加载 jsDelivr 兜底（html-to-image、JSZip 优先用 `frontend/vendor/` 本地包）
 - 导出前等待 `document.fonts.ready`；系统字体无需额外下载
 - 内容超高时先自动缩标题字号（下限 34px）；仍放不下才提示「内容溢出」，可「变紧凑 / 删最后一条 / 建议拆页」，不会自动拆页

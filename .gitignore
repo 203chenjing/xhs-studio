@@ -28,7 +28,12 @@ build/
 # App runtime
 backend/uploads/
 backend/logs/
+backend/logs-server.txt
 .DS_Store
+
+# Visual regression artifacts & font build temp
+tools/visual/artifacts/
+.font-build/
 # job-tracker-extension local secrets
 job-tracker-extension/.local-settings.json
 job-tracker-extension/dev-api-key.txt

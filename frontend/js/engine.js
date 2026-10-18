@@ -1027,12 +1027,10 @@
     return { overflow, sparse };
   }
 
-  /** 页面字体固定用系统字体：预览与 html-to-image 导出才能完全一致。 */
+  /** 页面字体固定用本地子集字体：预览、导出、CI 截图的字形完全一致。 */
   const SYSTEM_PAGE_FONTS = {
-    "--page-font-title":
-      '"Songti SC", "STSong", "Noto Serif CJK SC", "Source Han Serif SC", "SimSun", serif',
-    "--page-font-body":
-      '"PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC", sans-serif',
+    "--page-font-title": '"XHS Serif", "Songti SC", "STSong", "Noto Serif CJK SC", "SimSun", serif',
+    "--page-font-body": '"XHS Sans", "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif',
     "--page-font-mono": 'ui-monospace, "Cascadia Code", Consolas, monospace',
   };
 
