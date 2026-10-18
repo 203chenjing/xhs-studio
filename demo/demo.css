@@ -544,3 +544,9 @@ a { text-decoration: none; }
   .phone { height: calc(100vh - 40px); }
   @media (max-width: 900px) { .phone { height: 100vh; } }
 }
+
+/* 固定画布 + 固定壳层：关闭移动端字号自动放大 */
+html, body {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}

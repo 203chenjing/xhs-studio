@@ -1623,3 +1623,23 @@
     /* 图片本身不要重复描边，圆角由容器裁切 */
     .photo-hero-img, .gallery-img, .block-thumb-img { display: block; }
     .photo-page .page-content { gap: 18px; }
+
+    /* 时间线小标签：只允许单行，避免窄屏 / 导出字体替换后折行压住标题 */
+    .step-badge {
+      display: inline-flex;
+      align-items: center;
+      align-self: flex-start;
+      flex-shrink: 0;
+      white-space: nowrap;
+      max-width: 100%;
+      font-family: var(--page-font-body);
+      letter-spacing: 0.02em;
+      line-height: 1.35;
+    }
+
+    /* 固定 1080×1440 画布：关闭移动端字号自动放大（font boosting），
+       否则窄屏上标签/标题会被系统放大后折行、压住下一行。 */
+    .xhs-page {
+      -webkit-text-size-adjust: none;
+      text-size-adjust: none;
+    }

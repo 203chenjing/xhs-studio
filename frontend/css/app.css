@@ -2704,3 +2704,9 @@ body.flow-busy .progress-wrap.active .flow-progress { display: none; }
 
 /* 顶部已有全局进度条时，侧栏不再重复一份 */
 body.flow-busy .progress-wrap { display: none !important; }
+
+/* 固定视口工具：禁止移动端自动放大字号 */
+html, body {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
