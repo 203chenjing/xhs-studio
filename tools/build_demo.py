@@ -54,6 +54,7 @@ COPIES = [
     ("frontend/js/themes.js", "assets/themes.js"),
     ("frontend/vendor/html-to-image.min.js", "assets/vendor/html-to-image.min.js"),
     ("frontend/vendor/jszip.min.js", "assets/vendor/jszip.min.js"),
+    ("tools/demo/vendor/qrcode.min.js", "assets/vendor/qrcode.min.js"),
 ]
 
 

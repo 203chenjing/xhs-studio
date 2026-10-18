@@ -550,3 +550,41 @@ html, body {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
+
+/* 桌面侧栏：GitHub + 扫码入口 */
+.desk-links { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
+.desk-link-qr {
+  display: inline-flex; align-items: center; gap: 8px;
+  color: #d7dbe3;
+  border-bottom-color: rgba(255, 255, 255, 0.16);
+}
+.desk-link-qr:hover { color: #fff; }
+.desk-qr-icon {
+  width: 14px; height: 14px; flex-shrink: 0;
+  background:
+    linear-gradient(90deg, currentColor 0 4px, transparent 4px 10px, currentColor 10px 14px),
+    linear-gradient(currentColor 0 4px, transparent 4px 10px, currentColor 10px 14px);
+  background-size: 14px 14px;
+  -webkit-mask:
+    linear-gradient(#000 0 0) 0 0 / 4px 4px no-repeat,
+    linear-gradient(#000 0 0) 10px 0 / 4px 4px no-repeat,
+    linear-gradient(#000 0 0) 0 10px / 4px 4px no-repeat,
+    linear-gradient(#000 0 0) 6px 6px / 2px 2px no-repeat,
+    linear-gradient(#000 0 0) 10px 10px / 4px 4px no-repeat;
+  mask:
+    linear-gradient(#000 0 0) 0 0 / 4px 4px no-repeat,
+    linear-gradient(#000 0 0) 10px 0 / 4px 4px no-repeat,
+    linear-gradient(#000 0 0) 0 10px / 4px 4px no-repeat,
+    linear-gradient(#000 0 0) 6px 6px / 2px 2px no-repeat,
+    linear-gradient(#000 0 0) 10px 10px / 4px 4px no-repeat;
+  background-color: currentColor;
+}
+
+/* SVG 版二维码图标：清掉上面的 CSS 画图回退 */
+.desk-qr-icon {
+  width: 14px; height: 14px;
+  background: none;
+  -webkit-mask: none;
+  mask: none;
+  color: currentColor;
+}

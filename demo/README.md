@@ -8,14 +8,16 @@
 ```
 demo/
   index.html          # 入口（移动端优先，桌面显示为手机框）
+  qr.html             # 「扫码在手机上看」页（二维码在浏览器内生成）
   demo.css / demo.js  # 演示壳层交互
+  qr.css / qr.js      # 二维码页
   deck.js             # 由 tools/build_demo.py 生成的两份真实数据
   assets/
     page.css          # 产品页面版式（从 frontend/css/page.css 复制）
     engine.js         # 产品渲染引擎（XHSEngine）
     themes.js         # 7 套主题 token
     fonts.css + fonts/# 本地子集字体
-    vendor/           # html-to-image + jszip（浏览器内导出）
+    vendor/           # html-to-image + jszip + qrcode（浏览器内导出/二维码）
 ```
 
 ## 部署到云端（WorkBuddy 等静态托管）
@@ -53,5 +55,7 @@ python tools/build_demo.py
 2. **审核**：发布风险、标题、候选 hook、正文 + 话题，可复制 / 替换标题
 3. **排版**：左右滑动画布、7 套主题实时切换、页码与页面类型
 4. **导出**：浏览器内逐页渲染 2160×2880 PNG，打包 `title.txt`、`caption.txt`、`publish.json`、`meta.json`
+5. **扫码页**：桌面侧栏「扫码在手机上看」→ `qr.html`。二维码在浏览器本地生成，默认指向当前部署地址；可以手动改成线上地址预览，支持复制链接、下载 640×640 带静区的 PNG
 
 > 生成过程是预生成内容的回放（约 2 秒），不是现场调用模型；这样 Demo 在云端零成本、可离线演示。
+> `qr.html` 在手机端会自动隐藏二维码，改为「直接打开 Demo」入口。
