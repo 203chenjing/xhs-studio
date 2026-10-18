@@ -138,7 +138,7 @@
       renderThumbs();
       renderCanvas();
     }
-    toast("已切换案例");
+    toast("已切换选题");
   }
 
   function syncBase() {
@@ -161,8 +161,8 @@
     el.exportBtn.disabled = state.step !== 3 || !state.started;
     if (state.step === 1) {
       el.primary.textContent = "生成并审核";
-      el.ctaHint.textContent = "回放约 2 秒 · 内容为真实模型预生成";
-      el.stageNote.textContent = "生成后可逐页查看、切换主题并导出";
+      el.ctaHint.textContent = "约 2 秒 · 完整体验写稿与审核";
+      el.stageNote.textContent = "成稿后可逐页查看、切换主题并导出";
     } else if (state.step === 2) {
       el.primary.textContent = "开始排版";
       el.ctaHint.textContent = "审核通过 · 可翻页预览后再进排版";
@@ -193,7 +193,7 @@
     el.primary.disabled = true;
     el.gen.hidden = false;
     el.genStage.textContent = "① 正在写稿…";
-    el.genNote.textContent = "按 3:4 画布自由组页 · 预生成内容回放";
+    el.genNote.textContent = "按 3:4 画布自由组页 · 约 2 秒";
     el.genBar.style.width = "12%";
     var t1 = setTimeout(function () {
       el.genStage.textContent = "② 正在审核标题与排版…";
@@ -219,7 +219,7 @@
       el.stageEmpty.hidden = true;
       el.canvasBox.hidden = false;
       requestAnimationFrame(fitCanvas);
-      toast("审核完成 · 可以开始排版");
+      toast("成稿已就绪 · 可以开始排版");
     }, 2050);
     void t1; void t2; void t3;
   }
@@ -429,7 +429,7 @@
         zip.file("publish.json", JSON.stringify({
           title: state.publishTitle, caption: d.caption,
           images: list.map(function (_, i) { return "pages/" + String(i + 1).padStart(2, "0") + ".png"; }),
-          meta: { studio: "xhs-studio", demo: true, style: state.theme, page_count: list.length, tags: tags }
+          meta: { studio: "xhs-studio", mode: "static", style: state.theme, page_count: list.length, tags: tags }
         }, null, 2));
         zip.file("meta.json", JSON.stringify({ style: state.theme, page_count: list.length, title: state.publishTitle }, null, 2));
         el.exportStatus.textContent = "打包中…";

@@ -122,9 +122,9 @@
         <div class="deck-kicker">${escapeHtml(d.kicker)}</div>
         <div class="deck-title">${escapeHtml(d.title)}</div>
         <div class="deck-meta">
-          <span>${d.data.pages.length} 页</span>
+          <span>${d.data.pages.length} 页成稿</span>
           <span>${escapeHtml(themeName(d.style))}</span>
-          <span>真实模型生成</span>
+          <span>可直接发布</span>
         </div>
       </button>`).join("");
     el.decks.querySelectorAll("[data-deck]").forEach((btn) => {
@@ -154,7 +154,7 @@
     const d = deck();
     el.intentText.textContent = d.intent;
     el.intentKicker.textContent = d.kicker;
-    el.footDeck.textContent = d.id;
+    el.footDeck.textContent = "xhs-studio";
     el.deckMeta.innerHTML = [
       `${pages().length} 页`,
       themeName(state.theme),
@@ -178,7 +178,7 @@
     if (startBtn) startBtn.disabled = true;
     el.gen.hidden = false;
     el.genStage.textContent = "① 正在写稿…";
-    el.genNote.textContent = "按 3:4 画布自由组页 · 这是预生成内容的回放";
+    el.genNote.textContent = "按 3:4 画布自由组页 · 约 2 秒";
     el.genBar.style.width = "12%";
     const t1 = setTimeout(() => {
       el.genStage.textContent = "② 正在审核标题与排版…";
@@ -421,7 +421,7 @@
         title: state.publishTitle,
         caption: d.caption,
         images: list.map((_, i) => `pages/${String(i + 1).padStart(2, "0")}.png`),
-        meta: { studio: "xhs-studio", demo: true, style: state.theme, page_count: list.length, tags },
+        meta: { studio: "xhs-studio", mode: "static", style: state.theme, page_count: list.length, tags },
       }, null, 2));
       zip.file("meta.json", JSON.stringify({ style: state.theme, page_count: list.length, title: state.publishTitle }, null, 2));
 

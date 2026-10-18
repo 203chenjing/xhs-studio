@@ -1,4 +1,4 @@
-/* QR hand-off page: encodes the demo URL in the browser, no external API */
+/* QR hand-off page: encodes the workspace URL in the browser, no external API */
 (function () {
   "use strict";
 
@@ -91,7 +91,7 @@
     var url = String(value || "").trim();
     if (!isHttp(url)) {
       note.className = "qr-note warn";
-      note.textContent = "请输入完整的 http(s) 地址，例如 https://example.com/demo/";
+      note.textContent = "请输入完整的 http(s) 地址，例如 https://example.com/xhs/";
       return;
     }
     current = url;
@@ -150,7 +150,7 @@
     }
     var a = document.createElement("a");
     a.href = href;
-    a.download = "xhs-studio-demo-qr.png";
+    a.download = "xhs-studio-qr.png";
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -161,7 +161,7 @@
   if (direct && window.matchMedia && window.matchMedia("(max-width: 900px)").matches) {
     direct.hidden = false;
     var h1 = document.querySelector(".qr-copy h1");
-    if (h1) h1.innerHTML = "在手机上看<br>完整体验";
-    document.title = "在手机上看 · 小红书一键成图";
+    if (h1) h1.innerHTML = "在手机上<br>打开工作台";
+    document.title = "工作台 · 小红书一键成图";
   }
 })();

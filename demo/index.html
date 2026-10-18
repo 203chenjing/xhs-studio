@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#0b0c10">
-  <meta name="description" content="小红书一键成图：从一句意图到可发布的 3:4 图文。真实模型内容 + 真实渲染引擎 + 浏览器内导出 ZIP。">
-  <title>小红书一键成图 · 交互 Demo</title>
+  <meta name="description" content="从一句意图，到一套能发的图文。真实模型成稿、7 套主题、3:4 画布，浏览器内导出 2160×2880 发布包。">
+  <title>小红书一键成图 · 创作者工作台</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23f0405a'/%3E%3Ctext x='16' y='22' font-size='17' font-family='sans-serif' font-weight='700' text-anchor='middle' fill='%23fff'%3E%E5%B0%8F%3C/text%3E%3C/svg%3E">
   <link rel="preload" href="assets/fonts/xhs-sans-regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/xhs-sans-bold.woff2" as="font" type="font/woff2" crossorigin>
@@ -17,16 +17,16 @@
 <body>
   <div class="desk">
     <aside class="desk-copy">
-      <p class="eyebrow">xhs-studio · interactive demo</p>
+      <p class="eyebrow">xhs-studio · creator workspace</p>
       <h1>把一段想法<br>变成能发的图文</h1>
-      <p class="desk-lead">写意图 → 出稿审核 → 改页导出。右边是一次完整走查，内容由真实模型生成。</p>
+      <p class="desk-lead">从选题、成稿、审核到发布包，一条工作流走完。右侧是创作者工作台，内容由真实模型生成。</p>
       <ul class="desk-list">
-        <li><span>01</span><div><b>内容是真的</b><p>「秋招避坑清单」由 deepseek-chat 现场生成，没有占位文案。</p></div></li>
-        <li><span>02</span><div><b>版式是真的</b><p>直接复用产品渲染引擎与 7 套主题，3:4 画布 1080×1440。</p></div></li>
-        <li><span>03</span><div><b>导出是真的</b><p>浏览器内出 2160×2880 PNG + title / caption，打包成 ZIP。</p></div></li>
+        <li><span>01</span><div><b>内容不是占位符</b><p>「秋招避坑清单」由 deepseek-chat 真实生成，标题、正文、7 页版式可直接发布。</p></div></li>
+        <li><span>02</span><div><b>版式不是截图</b><p>产品同源渲染引擎 + 7 套主题，3:4 画布 1080×1440。</p></div></li>
+        <li><span>03</span><div><b>导出的是成品</b><p>浏览器内出 2160×2880 PNG 与 title / caption，打包成 ZIP。</p></div></li>
       </ul>
       <div class="desk-links">
-        <a class="desk-link" href="pc.html">桌面版工作台 Demo →</a>
+        <a class="desk-link" href="pc.html">桌面版工作台 →</a>
         <a class="desk-link" href="https://github.com/203chenjing/xhs-studio" target="_blank" rel="noreferrer">GitHub · 203chenjing/xhs-studio →</a>
         <a class="desk-link desk-link-qr" href="qr.html">
           <svg class="desk-qr-icon" viewBox="0 0 16 16" aria-hidden="true">
@@ -44,10 +44,10 @@
             <span class="brand-mark" aria-hidden="true">小</span>
             <div class="brand-text">
               <b>小红书一键成图</b>
-              <span>交互 Demo</span>
+              <span>创作者工作台</span>
             </div>
           </div>
-          <span class="pill">DEMO</span>
+          <span class="pill">BETA</span>
         </header>
 
         <nav class="stepper" id="stepper" aria-label="流程步骤">
@@ -59,15 +59,15 @@
         <main class="screens" id="screens">
           <section class="screen is-active" data-screen="1" aria-label="输入意图">
             <div class="scroll">
-              <p class="eyebrow">创作工作台 · 3:4 竖版</p>
-              <h2 class="hero-title">先选一个真实案例</h2>
-              <p class="hero-sub">两份内容都是真实模型输出。选一份，走完从意图到发布的完整流程。</p>
+              <p class="eyebrow">选题 → 成稿 → 发布</p>
+              <h2 class="hero-title">先选一篇，<br>直接看成品</h2>
+              <p class="hero-sub">两份真实选题的完整成稿：标题、正文、7 页版式都已就位。换风格、翻页、直接导出发布包。</p>
 
               <div class="decks" id="decks"></div>
 
               <div class="intent-card">
                 <div class="intent-head">
-                  <span>本次意图</span>
+                  <span>选题意图</span>
                   <span class="mono" id="intent-kicker">清单型 · 7 页</span>
                 </div>
                 <p id="intent-text"></p>
@@ -76,14 +76,14 @@
               <div class="meta-chips" id="deck-meta"></div>
             </div>
             <div class="actions">
-              <button type="button" class="btn primary" id="btn-start">生成并查看成稿</button>
-              <p class="fine">演示数据已预生成，点击后回放 ①写稿 → ②审核，约 2 秒</p>
+              <button type="button" class="btn primary" id="btn-start">打开这篇成稿</button>
+              <p class="fine">成稿已就位 · 约 2 秒进入审核与排版</p>
             </div>
           </section>
 
           <section class="screen" data-screen="2" aria-label="审核">
             <div class="scroll">
-              <div class="risk"><span class="risk-dot" aria-hidden="true"></span><b>可以发</b><span>· 未发现发布风险</span></div>
+              <div class="risk"><span class="risk-dot" aria-hidden="true"></span><b>可以发布</b><span>· 未发现发布风险</span></div>
 
               <div class="row-between">
                 <h2 class="h2">发布文案</h2>
@@ -146,7 +146,7 @@
               <button type="button" class="btn primary" id="btn-export">导出发布包</button>
               <div class="actions-sub">
                 <button type="button" class="link" id="btn-copy-all">复制标题和正文</button>
-                <button type="button" class="link" id="btn-restart">重新体验</button>
+                <button type="button" class="link" id="btn-restart">重新开始</button>
               </div>
             </div>
           </section>

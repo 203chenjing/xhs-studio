@@ -43,15 +43,15 @@ python tools/visual/run.py --update # 有意改版后重建基线
 
 CI 见 `.github/workflows/ci.yml`：`backend-tests` + `visual-regression`（windows-latest）。
 
-## 交互 Demo（可静态托管）
+## 在线体验（静态托管）
 
-`demo/` 是一个**纯静态、移动端优先**的产品演示，可以直接丢到 WorkBuddy / 任意静态托管：
+`demo/` 是产品的**在线体验版**，可以直接丢到 WorkBuddy / 任意静态托管：
 
 - 完整走「输入 → 审核 → 排版 → 导出 ZIP」，导出在浏览器内完成（2160×2880 PNG + 文案）
-- 内容来自真实模型输出（秋招清单 / 带团队复盘两份），页面复用本仓库渲染引擎与 7 套主题
-- 入口：`demo/index.html` 手机版；`demo/pc.html` 桌面版工作台（三栏、缩略图、7 主题、导出）
+- 内容来自真实模型成稿（秋招清单 / 带团队复盘两份），页面复用本仓库渲染引擎与 7 套主题
+- 入口：`demo/index.html` 手机版；`demo/pc.html` 桌面工作台（三栏、缩略图、7 主题、导出）
 - 附带 `demo/qr.html`「扫码在手机上看」页：二维码浏览器内生成，可改成线上地址，支持下载 640×640 PNG
-- 无后端、无构建步骤；资源全部相对路径
+- 无后端、无构建步骤；资源全部相对路径；一次真实生成被冻结成案例回放
 - 制作方法与复用清单见 [`docs/DEMO-METHOD.md`](./docs/DEMO-METHOD.md)
 - 托管到 WorkBuddy / 任一静态站点：见 [`docs/WORKBUDDY-DEPLOY.md`](./docs/WORKBUDDY-DEPLOY.md)（含可直接粘贴的任务说明与验收清单）
 - 重新生成：`python tools/build_demo.py`（详见 [demo/README.md](./demo/README.md)）
