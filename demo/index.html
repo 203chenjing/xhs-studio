@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0c10">
+  <meta name="description" content="小红书一键成图：从一句意图到可发布的 3:4 图文。真实模型内容 + 真实渲染引擎 + 浏览器内导出 ZIP。">
+  <title>小红书一键成图 · 交互 Demo</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23f0405a'/%3E%3Ctext x='16' y='22' font-size='17' font-family='sans-serif' font-weight='700' text-anchor='middle' fill='%23fff'%3E%E5%B0%8F%3C/text%3E%3C/svg%3E">
+  <link rel="preload" href="assets/fonts/xhs-sans-regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/xhs-sans-bold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/xhs-serif-bold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/fonts.css">
+  <link rel="stylesheet" href="assets/page.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body>
+  <div class="desk">
+    <aside class="desk-copy">
+      <p class="eyebrow">xhs-studio · interactive demo</p>
+      <h1>把一段想法<br>变成能发的图文</h1>
+      <p class="desk-lead">写意图 → 出稿审核 → 改页导出。右边是一次完整走查，内容由真实模型生成。</p>
+      <ul class="desk-list">
+        <li><span>01</span><div><b>内容是真的</b><p>「秋招避坑清单」由 deepseek-chat 现场生成，没有占位文案。</p></div></li>
+        <li><span>02</span><div><b>版式是真的</b><p>直接复用产品渲染引擎与 7 套主题，3:4 画布 1080×1440。</p></div></li>
+        <li><span>03</span><div><b>导出是真的</b><p>浏览器内出 2160×2880 PNG + title / caption，打包成 ZIP。</p></div></li>
+      </ul>
+      <a class="desk-link" href="https://github.com/203chenjing/xhs-studio" target="_blank" rel="noreferrer">GitHub · 203chenjing/xhs-studio →</a>
+    </aside>
+
+    <div class="phone">
+      <div class="app" id="app">
+        <header class="app-top">
+          <div class="brand">
+            <span class="brand-mark" aria-hidden="true">小</span>
+            <div class="brand-text">
+              <b>小红书一键成图</b>
+              <span>交互 Demo</span>
+            </div>
+          </div>
+          <span class="pill">DEMO</span>
+        </header>
+
+        <nav class="stepper" id="stepper" aria-label="流程步骤">
+          <button type="button" data-goto="1" class="is-active"><i>1</i><span>输入</span></button>
+          <button type="button" data-goto="2"><i>2</i><span>审核</span></button>
+          <button type="button" data-goto="3"><i>3</i><span>排版</span></button>
+        </nav>
+
+        <main class="screens" id="screens">
+          <section class="screen is-active" data-screen="1" aria-label="输入意图">
+            <div class="scroll">
+              <p class="eyebrow">创作工作台 · 3:4 竖版</p>
+              <h2 class="hero-title">先选一个真实案例</h2>
+              <p class="hero-sub">两份内容都是真实模型输出。选一份，走完从意图到发布的完整流程。</p>
+
+              <div class="decks" id="decks"></div>
+
+              <div class="intent-card">
+                <div class="intent-head">
+                  <span>本次意图</span>
+                  <span class="mono" id="intent-kicker">清单型 · 7 页</span>
+                </div>
+                <p id="intent-text"></p>
+              </div>
+
+              <div class="meta-chips" id="deck-meta"></div>
+            </div>
+            <div class="actions">
+              <button type="button" class="btn primary" id="btn-start">生成并查看成稿</button>
+              <p class="fine">演示数据已预生成，点击后回放 ①写稿 → ②审核，约 2 秒</p>
+            </div>
+          </section>
+
+          <section class="screen" data-screen="2" aria-label="审核">
+            <div class="scroll">
+              <div class="risk"><span class="risk-dot" aria-hidden="true"></span><b>可以发</b><span>· 未发现发布风险</span></div>
+
+              <div class="row-between">
+                <h2 class="h2">发布文案</h2>
+                <span class="mono" id="review-kicker">审核完成</span>
+              </div>
+
+              <div class="card">
+                <div class="card-head">
+                  <span>标题</span>
+                  <button type="button" class="mini" data-copy="title">复制</button>
+                </div>
+                <p class="pub-title" id="review-title"></p>
+                <div class="hooks" id="hooks"></div>
+                <p class="hint">点候选标题可直接替换发布标题</p>
+              </div>
+
+              <div class="card">
+                <div class="card-head">
+                  <span>正文 + 话题</span>
+                  <button type="button" class="mini" data-copy="caption">复制</button>
+                </div>
+                <p class="caption" id="review-caption"></p>
+                <button type="button" class="link expand" id="btn-expand-caption">展开全文</button>
+              </div>
+
+              <details class="checks">
+                <summary>发布前检查 · 3 项通过</summary>
+                <ul>
+                  <li><span>标题 24 字</span><em>信息流可完整展示</em></li>
+                  <li><span>封面 3:4</span><em>1080×1440 · 2× 导出</em></li>
+                  <li><span>话题 8 个</span><em>覆盖秋招 / 简历 / 面试</em></li>
+                </ul>
+              </details>
+            </div>
+            <div class="actions two">
+              <button type="button" class="btn ghost" data-goto="1">上一步</button>
+              <button type="button" class="btn primary" data-goto="3">开始排版</button>
+            </div>
+          </section>
+
+          <section class="screen" data-screen="3" aria-label="排版与导出">
+            <div class="scroll layout-scroll">
+              <div class="row-between">
+                <div class="layout-meta">
+                  <span class="badge" id="page-type">封面</span>
+                  <span class="mono" id="page-count">1 / 7</span>
+                </div>
+                <span class="mono layout-hint">左右滑动</span>
+              </div>
+
+              <div class="theme-block">
+                <div class="theme-head"><span>风格</span><span class="mono" id="theme-name">简约 INS</span></div>
+                <div class="theme-scroll" id="theme-row"></div>
+              </div>
+
+              <div class="carousel" id="carousel" aria-label="页面预览"></div>
+              <div class="dots" id="dots"></div>
+            </div>
+            <div class="actions">
+              <button type="button" class="btn primary" id="btn-export">导出发布包</button>
+              <div class="actions-sub">
+                <button type="button" class="link" id="btn-copy-all">复制标题和正文</button>
+                <button type="button" class="link" id="btn-restart">重新体验</button>
+              </div>
+            </div>
+          </section>
+        </main>
+
+        <footer class="app-foot">
+          <span>真实内容 · 真实渲染 · 浏览器内导出</span>
+          <span class="mono" id="foot-deck">qiuzhao</span>
+        </footer>
+      </div>
+    </div>
+  </div>
+
+  <div class="gen" id="gen" hidden>
+    <div class="gen-card">
+      <div class="gen-skel" aria-hidden="true">
+        <span class="sk t"></span><span class="sk"></span><span class="sk"></span><span class="sk short"></span>
+      </div>
+      <p class="gen-stage" id="gen-stage">① 正在写稿…</p>
+      <div class="gen-bar"><span id="gen-bar-fill"></span></div>
+      <p class="gen-note" id="gen-note">按 3:4 画布自由组页 · 约 2 秒</p>
+    </div>
+  </div>
+
+  <div class="modal" id="export-modal" hidden>
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="export-title">
+      <div class="sheet-grab" aria-hidden="true"></div>
+      <h3 id="export-title">正在导出发布包</h3>
+      <p class="sheet-sub" id="export-sub">逐页渲染 2160×2880 PNG…</p>
+      <div class="bar"><span id="export-bar"></span></div>
+      <p class="mono sheet-status" id="export-status">0 / 7</p>
+      <div class="sheet-actions" id="export-actions" hidden>
+        <a class="btn primary" id="btn-download" download>下载 ZIP</a>
+        <button type="button" class="btn ghost" id="btn-export-close">完成</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+  <div id="export-stage" aria-hidden="true"></div>
+
+  <script src="deck.js"></script>
+  <script src="assets/themes.js"></script>
+  <script src="assets/engine.js"></script>
+  <script src="assets/vendor/html-to-image.min.js"></script>
+  <script src="assets/vendor/jszip.min.js"></script>
+  <script src="demo.js"></script>
+</body>
+</html>

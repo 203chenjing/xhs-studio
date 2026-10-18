@@ -43,6 +43,18 @@ python tools/visual/run.py --update # 有意改版后重建基线
 
 CI 见 `.github/workflows/ci.yml`：`backend-tests` + `visual-regression`（windows-latest）。
 
+## 交互 Demo（可静态托管）
+
+`demo/` 是一个**纯静态、移动端优先**的产品演示，可以直接丢到 WorkBuddy / 任意静态托管：
+
+- 完整走「输入 → 审核 → 排版 → 导出 ZIP」，导出在浏览器内完成（2160×2880 PNG + 文案）
+- 内容来自真实模型输出（秋招清单 / 带团队复盘两份），页面复用本仓库渲染引擎与 7 套主题
+- 无后端、无构建步骤；入口是 `demo/index.html`，资源全部相对路径
+- 重新生成：`python tools/build_demo.py`（详见 [demo/README.md](./demo/README.md)）
+
+本地预览：`cd demo; python -m http.server 8810` → http://127.0.0.1:8810/
+
+
 
 
 ## 「2+1」调用架构
